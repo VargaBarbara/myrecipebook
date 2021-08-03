@@ -3,19 +3,28 @@ package hu.progmasters.vizsgaremek.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import javax.persistence.*;
+import java.time.LocalDate;
+//import java.util.List;
 
 @Data
 @NoArgsConstructor
+@Entity
 public class Receipt {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private List<String> ingredients;
+
+    //private List<String> ingredients;  //TODO
     private String preparation;
     private String note;
-    private Integer creatorId;
-    private LocalDateTime creationTime;
-    private LocalDateTime lastEditTime;
+
+    @ManyToOne
+    private User creator;
+    private LocalDate creationDate;
+    private LocalDate lastEditDate;
+
+    //private Double rating;
 
 }
