@@ -15,4 +15,12 @@ public class ReceiptApp {
     @Bean
     ModelMapper modelMapper() {return new ModelMapper();}
 
+    //TODO swagger
+    //TODO postman
+    //TODO column name
+    //TODO tests
+    //TODO optional new banner
+    //TODO validation
+
+
 }

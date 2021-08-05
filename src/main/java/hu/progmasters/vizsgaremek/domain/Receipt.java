@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-//import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -16,7 +16,6 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //private List<String> ingredients;  //TODO
     private String preparation;
     private String note;
 

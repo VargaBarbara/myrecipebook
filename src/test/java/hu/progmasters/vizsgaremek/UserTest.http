@@ -1,0 +1,80 @@
+### saveUser
+POST http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Chuck Norris",
+  "email" : "chucknorris@gmail.com"
+}
+
+### findAllUsers
+GET http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
+### findUserById
+GET http://localhost:8080/api/users/1
+Content-Type: application/json
+Accept: application/json
+
+### updateUser
+PUT http://localhost:8080/api/users/1?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Chuck Norris",
+  "email" : "gmail@chucknorris.com"
+}
+
+### deleteUser
+DELETE http://localhost:8080/api/users/2?userId=2
+Content-Type: application/json
+Accept: application/json
+
+### deleteUser rossz jogosultsággal
+DELETE http://localhost:8080/api/users/2?userId=1
+Content-Type: application/json
+Accept: application/json
+
+###  saveReceipt
+POST http://localhost:8080/api/receipts?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.",
+  "note" : "Néha amaz is kell bele. Néha."
+}
+
+### findAllReceipts
+GET http://localhost:8080/api/receipts
+Content-Type: application/json
+Accept: application/json
+
+### findReceiptById
+GET http://localhost:8080/api/receipts/receipt/2
+Content-Type: application/json
+Accept: application/json
+
+### findReceiptsByUser
+GET http://localhost:8080/api/receipts/user/1
+Content-Type: application/json
+Accept: application/json
+
+### updateReceipt
+PUT http://localhost:8080/api/receipts/1?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Ez pedig így meg úgy kell elkészíteni, jó étvágyat hozzá!",
+  "note" : "Érdemes belőle 2 adagot készíteni, hogy a későn érkezőknek is jusson."
+}
+
+### deleteReceipt
+DELETE http://localhost:8080/api/receipts/2?userId=1
+Content-Type: application/json
+Accept: application/json
+
