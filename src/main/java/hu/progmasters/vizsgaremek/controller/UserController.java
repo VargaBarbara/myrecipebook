@@ -1,5 +1,7 @@
 package hu.progmasters.vizsgaremek.controller;
 
+import hu.progmasters.vizsgaremek.dto.RatingCreateUpdateCommand;
+import hu.progmasters.vizsgaremek.dto.RatingInfo;
 import hu.progmasters.vizsgaremek.dto.UserCreateUpdateCommand;
 import hu.progmasters.vizsgaremek.dto.UserInfo;
 import hu.progmasters.vizsgaremek.service.UserService;
@@ -50,25 +52,64 @@ public class UserController {
         return service.findUserById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{toUpdateId}")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "updates one specific user account")
     @ApiResponse(responseCode = "201", description = "specific user account updated")
-    public UserInfo updateUser(@PathVariable Integer id, @RequestParam Integer userId, @RequestBody UserCreateUpdateCommand command) {
-        return service.updateUser(id, userId, command);
+    public UserInfo updateUser(@PathVariable Integer toUpdateId, @RequestParam Integer loggedInUserId,
+                               @RequestBody UserCreateUpdateCommand command) {
+        return service.updateUser(toUpdateId, loggedInUserId, command);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{toDeleteId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "deletes one specific user account")
     @ApiResponse(responseCode = "200", description = "specific user account deleted")
-    public UserInfo deleteUser(@PathVariable Integer id, @RequestParam Integer userId) {
-        return service.deleteUser(id, userId);
+    public UserInfo deleteUser(@PathVariable Integer toDeleteId, @RequestParam Integer loggedInUserId) {
+        return service.deleteUser(toDeleteId, loggedInUserId);
     }
 
 
 
 
-    //Rating methods TODO
+    //Rating methods
+
+
+/*
+    Double getAverageRating(Integer id);                            -- nem kell a controllerig eljutnia!
+    */
+
+    @PostMapping("/{userId}/ratings/{receiptId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "saves rating")
+    @ApiResponse(responseCode = "201", description = "rating saved")
+    public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer receiptId,
+                                 @RequestBody RatingCreateUpdateCommand command){
+        return service.saveOrUpdateRating(userId, receiptId, command);
+    }
+
+    @GetMapping("/{userId}/ratings/{receiptId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "returns one specific rating")
+    @ApiResponse(responseCode = "200", description = "specific rating returned")
+    public RatingInfo findRatingByUserAndReceipt(@PathVariable Integer userId, @PathVariable Integer receiptId){
+        return service.findRatingByUserAndReceipt(userId, receiptId);
+    }
+
+    @GetMapping("/{userId}/ratings/")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "returns all ratings given by a specific user")
+    @ApiResponse(responseCode = "200", description = "all receipts listed")
+    public List<RatingInfo> findAllRatingsByUser(@PathVariable Integer userId){
+        return service.findAllRatingsByUser(userId);
+    }
+
+    @DeleteMapping("/{userId}/ratings/{receiptId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "deletes one specific rating")
+    @ApiResponse(responseCode = "200", description = "specific rating deleted")
+    public RatingInfo deleteRating(@PathVariable Integer userId, @PathVariable Integer receiptId){
+        return service.deleteRating(userId, receiptId);
+    }
 
 }

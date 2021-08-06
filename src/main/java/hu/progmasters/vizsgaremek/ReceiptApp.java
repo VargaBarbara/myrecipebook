@@ -21,7 +21,7 @@ public class ReceiptApp {
         return new ObjectMapper().findAndRegisterModules();
     }
 
-    //TODO swagger - only rating left
+    //TODO swagger - only rating left (for domains too?)
     //TODO postman - only rating left
     //TODO column name
     //TODO tests

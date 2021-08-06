@@ -1,12 +1,12 @@
 package hu.progmasters.vizsgaremek.repository;
 
 import hu.progmasters.vizsgaremek.domain.Receipt;
-import hu.progmasters.vizsgaremek.domain.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReceiptRepositoryJPA implements ReceiptRepository{
@@ -15,9 +15,9 @@ public class ReceiptRepositoryJPA implements ReceiptRepository{
     private EntityManager entityManager;
 
     @Override
-    public Receipt save(Receipt toSave) {
+    public Optional<Receipt> save(Receipt toSave) {
         entityManager.persist(toSave);
-        return toSave;
+        return Optional.of(toSave);
     }
 
     @Override
@@ -26,8 +26,15 @@ public class ReceiptRepositoryJPA implements ReceiptRepository{
     }
 
     @Override
-    public Receipt findById(Integer id) {
-        return entityManager.find(Receipt.class, id);
+    public Optional<Receipt> findById(Integer id) {
+        Optional<Receipt> toReturn;
+        Receipt receipt = entityManager.find(Receipt.class, id);
+        if (receipt == null) {
+            toReturn = Optional.empty();
+        } else {
+            toReturn = Optional.of(receipt);
+        }
+        return toReturn;
     }
 
     @Override
@@ -37,13 +44,13 @@ public class ReceiptRepositoryJPA implements ReceiptRepository{
     }
 
     @Override
-    public Receipt update(Receipt toUpdate) {
-        return entityManager.merge(toUpdate);   //TODO saveOrUpdate in Service
+    public Optional<Receipt> update(Receipt toUpdate) {
+        return Optional.of(entityManager.merge(toUpdate));
     }
 
     @Override
-    public Receipt delete(Receipt toDelete) {
+    public Optional<Receipt> delete(Receipt toDelete) {
         entityManager.remove(toDelete);
-        return toDelete;
+        return Optional.of(toDelete);
     }
 }

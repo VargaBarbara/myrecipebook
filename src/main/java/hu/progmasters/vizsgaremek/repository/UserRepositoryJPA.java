@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryJPA implements UserRepository{
@@ -14,9 +15,9 @@ public class UserRepositoryJPA implements UserRepository{
     private EntityManager entityManager;
 
     @Override
-    public User save(User toSave) {
+    public Optional<User> save(User toSave) {
         entityManager.persist(toSave);
-        return toSave;
+        return Optional.of(toSave);
     }
 
     @Override
@@ -25,18 +26,25 @@ public class UserRepositoryJPA implements UserRepository{
     }
 
     @Override
-    public User findById(Integer id) {
-        return entityManager.find(User.class, id);
+    public Optional<User> findById(Integer id) {
+        Optional<User> toReturn;
+        User user = entityManager.find(User.class, id);
+        if (user == null) {
+            toReturn = Optional.empty();
+        } else {
+            toReturn = Optional.of(user);
+        }
+        return toReturn;
     }
 
     @Override
-    public User update(User toUpdate) {
-        return entityManager.merge(toUpdate);
+    public Optional<User> update(User toUpdate) {
+        return Optional.of(entityManager.merge(toUpdate));
     }
 
     @Override
-    public User delete(User toDelete) {
+    public Optional<User> delete(User toDelete) {
         entityManager.remove(toDelete);
-        return toDelete;
+        return Optional.of(toDelete);
     }
 }

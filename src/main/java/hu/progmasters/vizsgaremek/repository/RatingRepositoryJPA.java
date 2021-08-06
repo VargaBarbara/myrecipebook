@@ -4,7 +4,10 @@ import hu.progmasters.vizsgaremek.domain.Rating;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class RatingRepositoryJPA implements RatingRepository{
@@ -13,30 +16,52 @@ public class RatingRepositoryJPA implements RatingRepository{
     private EntityManager entityManager;
 
     @Override
-    public Rating saveRating(Rating toSave) {
+    public Optional<Rating> saveRating(Rating toSave) {
         entityManager.persist(toSave);
-        return toSave;
+        return Optional.of(toSave);
     }
 
     @Override
-    public Double getAverageRating(Integer id) {
-        return entityManager.createQuery("SELECT AVG(r.fingers) FROM Rating r " +
-                "WHERE r.receipt.id = :id", Double.class).getSingleResult();
+    public Optional<Double> getAverageRating(Integer receiptId) {
+        Optional<Double> toReturn;
+        try {
+            toReturn = Optional.of(entityManager.createQuery("SELECT AVG(r.fingers) FROM Rating r " +
+                    "WHERE r.receipt.id = :receiptId", Double.class)
+                    .setParameter("receiptId", receiptId).getSingleResult());
+        } catch (NoResultException noResultException) {
+            toReturn = Optional.empty();
+        }
+        return toReturn;
     }
 
     @Override
-    public Rating findById(Integer id) {
-        return entityManager.find(Rating.class, id);
+    public List<Rating> findAllByUser(Integer userId) {
+        return entityManager.createQuery("SELECT r FROM Rating r " +
+                "WHERE r.user.id = :userId", Rating.class)
+                .setParameter("userId", userId).getResultList();
     }
 
     @Override
-    public Rating updateRating(Rating toUpdate) {
-        return entityManager.merge(toUpdate);
+    public Optional<Rating> findByUserAndReceipt(Integer userId, Integer receiptId) {
+        Optional<Rating> toReturn;
+        try {
+            toReturn = Optional.of(entityManager.createQuery("SELECT r FROM Rating r " +
+                    "WHERE r.receipt.id = :receiptId AND r.user.id = :userId", Rating.class)
+                    .setParameter("receiptId", receiptId).setParameter("userId", userId).getSingleResult());
+        } catch (NoResultException noResultException) {
+            toReturn = Optional.empty();
+        }
+        return toReturn;
     }
 
     @Override
-    public Rating deleteRating(Rating toDelete) {
+    public Optional<Rating> updateRating(Rating toUpdate) {
+        return Optional.of(entityManager.merge(toUpdate));
+    }
+
+    @Override
+    public Optional<Rating> deleteRating(Rating toDelete) {
         entityManager.remove(toDelete);
-        return toDelete;
+        return Optional.of(toDelete);
     }
 }

@@ -8,13 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RatingCreateUpdateCommand {
 
-    //@Schema   TODO
-    private Integer userId;
-
-    //@Schema   TODO
-    private Integer receiptId;
-
-    @Schema(description = "how many finger would you lick after eating this", example = "7")
+    @Schema(description = "how many fingers would you lick after eating this", example = "7")
     private Integer fingers;
 
 }
