@@ -1,5 +1,6 @@
 package hu.progmasters.vizsgaremek;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,12 +16,19 @@ public class ReceiptApp {
     @Bean
     ModelMapper modelMapper() {return new ModelMapper();}
 
-    //TODO swagger
-    //TODO postman
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper().findAndRegisterModules();
+    }
+
+    //TODO swagger - only rating left
+    //TODO postman - only rating left
     //TODO column name
     //TODO tests
     //TODO optional new banner
     //TODO validation
+    //TODO jogosultságok
+    //TODO adott email címmel regisztráltak-e már
 
 
 }
