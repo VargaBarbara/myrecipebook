@@ -7,7 +7,27 @@ Accept: application/json
 
 {
   "name": "Chuck Norris",
+  "email" : "chucknorris1@gmail.com"
+}
+
+### saveUser
+POST http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Chuck Norris",
   "email" : "chucknorris2@gmail.com"
+}
+
+### saveUser
+POST http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Chuck Norris",
+  "email" : "chucknorris3@gmail.com"
 }
 
 ### findAllUsers
@@ -30,6 +50,11 @@ Accept: application/json
   "email" : "gmail@chucknorris.com"
 }
 
+### findAllUsers
+GET http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
 ### updateUser rossz jogosultsággal - NoAuthorityForActionException
 PUT http://localhost:8080/api/users/1?loggedInUserId=2
 Content-Type: application/json
@@ -40,8 +65,18 @@ Accept: application/json
   "email" : "gmail2@chucknorris.com"
 }
 
+### findAllUsers
+GET http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
 ### deleteUser
 DELETE http://localhost:8080/api/users/2?loggedInUserId=2
+Content-Type: application/json
+Accept: application/json
+
+### findAllUsers
+GET http://localhost:8080/api/users
 Content-Type: application/json
 Accept: application/json
 
@@ -50,10 +85,45 @@ DELETE http://localhost:8080/api/users/3?loggedInUserId=1
 Content-Type: application/json
 Accept: application/json
 
+### findAllUsers
+GET http://localhost:8080/api/users
+Content-Type: application/json
+Accept: application/json
+
 ###Receipt methods-----------------------------------------------------------------------------------------------------
 
 ###  saveReceipt
 POST http://localhost:8080/api/receipts?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.",
+  "note" : "Néha amaz is kell bele. Néha."
+}
+
+###  saveReceipt
+POST http://localhost:8080/api/receipts?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.",
+  "note" : "Néha amaz is kell bele. Néha."
+}
+
+###  saveReceipt
+POST http://localhost:8080/api/receipts?userId=1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.",
+  "note" : "Néha amaz is kell bele. Néha."
+}
+
+###  saveReceipt
+POST http://localhost:8080/api/receipts?userId=3
 Content-Type: application/json
 Accept: application/json
 
@@ -87,6 +157,11 @@ Accept: application/json
   "note" : "Érdemes belőle 2 adagot készíteni, hogy a későn érkezőknek is jusson."
 }
 
+### findAllReceipts
+GET http://localhost:8080/api/receipts
+Content-Type: application/json
+Accept: application/json
+
 ### updateReceipt rossz jogosultsággal - NoAuthorityForActionException
 PUT http://localhost:8080/api/receipts/2?userId=2
 Content-Type: application/json
@@ -97,13 +172,28 @@ Accept: application/json
   "note" : "Érdemes belőle 2 adagot készíteni, hogy a későn érkezőknek is jusson."
 }
 
+### findAllReceipts
+GET http://localhost:8080/api/receipts
+Content-Type: application/json
+Accept: application/json
+
 ### deleteReceipt
 DELETE http://localhost:8080/api/receipts/2?userId=1
 Content-Type: application/json
 Accept: application/json
 
+### findAllReceipts
+GET http://localhost:8080/api/receipts
+Content-Type: application/json
+Accept: application/json
+
 ### deleteReceipt rossz jogosultsággal - NoAuthorityForActionException
 DELETE http://localhost:8080/api/receipts/1?userId=2
+Content-Type: application/json
+Accept: application/json
+
+### findAllReceipts
+GET http://localhost:8080/api/receipts
 Content-Type: application/json
 Accept: application/json
 
@@ -118,8 +208,40 @@ Accept: application/json
   "fingers": 8
 }
 
+###  saveRating - módosítás
+POST http://localhost:8080/api/users/1/ratings/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fingers": 6
+}
+
+###  saveRating - módosítás
+POST http://localhost:8080/api/users/3/ratings/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fingers": 7
+}
+
+###  saveRating - módosítás
+POST http://localhost:8080/api/users/3/ratings/3
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fingers": 9
+}
+
 ###  findRatingByUserAndReceipt
-GET http://localhost:8080/api/users/1/ratings/1
+GET http://localhost:8080/api/users/3/ratings/1
+Content-Type: application/json
+Accept: application/json
+
+###  findAllRatingsByUser
+GET http://localhost:8080/api/users/3/ratings/
 Content-Type: application/json
 Accept: application/json
 
@@ -128,8 +250,12 @@ GET http://localhost:8080/api/users/1/ratings/
 Content-Type: application/json
 Accept: application/json
 
-
 ###  deleteRating
 DELETE http://localhost:8080/api/users/1/ratings/1
+Content-Type: application/json
+Accept: application/json
+
+###  findAllRatingsByUser
+GET http://localhost:8080/api/users/1/ratings/
 Content-Type: application/json
 Accept: application/json

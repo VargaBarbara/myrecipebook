@@ -10,6 +10,7 @@ public interface UserRepository {
     Optional<User> save(User toSave);
     List<User> findAll();
     Optional<User> findById(Integer id);
+    Optional<User> findByEmail(String email);
     Optional<User> update(User toUpdate);
     Optional<User> delete(User toDelete);
 

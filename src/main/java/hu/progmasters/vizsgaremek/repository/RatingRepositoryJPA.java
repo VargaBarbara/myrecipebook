@@ -28,7 +28,7 @@ public class RatingRepositoryJPA implements RatingRepository{
             toReturn = Optional.of(entityManager.createQuery("SELECT AVG(r.fingers) FROM Rating r " +
                     "WHERE r.receipt.id = :receiptId", Double.class)
                     .setParameter("receiptId", receiptId).getSingleResult());
-        } catch (NoResultException noResultException) {
+        } catch (NoResultException | NullPointerException exception) {
             toReturn = Optional.empty();
         }
         return toReturn;

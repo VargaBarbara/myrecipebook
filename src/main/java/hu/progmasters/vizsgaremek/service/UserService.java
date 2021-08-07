@@ -4,10 +4,7 @@ import hu.progmasters.vizsgaremek.domain.Rating;
 import hu.progmasters.vizsgaremek.domain.Receipt;
 import hu.progmasters.vizsgaremek.domain.User;
 import hu.progmasters.vizsgaremek.dto.*;
-import hu.progmasters.vizsgaremek.exceptionhandling.NoAuthorityForActionException;
-import hu.progmasters.vizsgaremek.exceptionhandling.RatingNotFoundException;
-import hu.progmasters.vizsgaremek.exceptionhandling.ReceiptNotFoundException;
-import hu.progmasters.vizsgaremek.exceptionhandling.UserNotFoundException;
+import hu.progmasters.vizsgaremek.exceptionhandling.*;
 import hu.progmasters.vizsgaremek.repository.RatingRepository;
 import hu.progmasters.vizsgaremek.repository.ReceiptRepository;
 import hu.progmasters.vizsgaremek.repository.UserRepository;
@@ -43,6 +40,10 @@ public class UserService {
     //TODO exception-ök feltöltése adattal
 
     public UserInfo saveUser(UserCreateUpdateCommand command) {
+        Optional<User> userWithEmail = userRepository.findByEmail(command.getEmail());
+        if (!userWithEmail.isEmpty()) {
+            throw new EmailIsAlreadyInUseException();
+        }
         User toSave = modelMapper.map(command, User.class);
         toSave.setId(null);
         toSave.setReceipts(new ArrayList<>());
@@ -221,7 +222,7 @@ public class UserService {
     private UserInfo convertUserToUserInfo(User user) {
         UserInfo userInfo = modelMapper.map(user, UserInfo.class);
         List<ReceiptInfo> receiptInfos = user.getReceipts().stream()
-                .map(entity -> modelMapper.map(entity, ReceiptInfo.class)).collect(Collectors.toList());
+                .map(this::convertReceiptToReceiptInfo).collect(Collectors.toList());
         userInfo.setReceipts(receiptInfos);
         return userInfo;
     }
@@ -229,6 +230,13 @@ public class UserService {
     private ReceiptInfo convertReceiptToReceiptInfo(Receipt receipt) {
         ReceiptInfo receiptInfo = modelMapper.map(receipt, ReceiptInfo.class);
         receiptInfo.setCreatorId(receipt.getCreator().getId());
+        Optional<Double> averageRating = ratingRepository.getAverageRating(receipt.getId());
+        if (averageRating.isEmpty()) {
+            receiptInfo.setRating(0.0);
+        } else {
+            Double avgRating = (double) Math.round(averageRating.get()*100)/100;
+            receiptInfo.setRating(avgRating);
+        }
         return receiptInfo;
     }
 

@@ -4,6 +4,7 @@ import hu.progmasters.vizsgaremek.domain.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,19 @@ public class UserRepositoryJPA implements UserRepository{
             toReturn = Optional.empty();
         } else {
             toReturn = Optional.of(user);
+        }
+        return toReturn;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        Optional<User> toReturn;
+        try {
+            User user = entityManager.createQuery("SELECT u FROM User u " +
+                    "WHERE u.email = :email", User.class).setParameter("email", email).getSingleResult();
+            toReturn = Optional.of(user);
+        } catch (NoResultException | NullPointerException exception) {
+            toReturn = Optional.empty();
         }
         return toReturn;
     }

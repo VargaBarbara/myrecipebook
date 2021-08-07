@@ -30,4 +30,7 @@ public class ReceiptInfo {
     @Schema(description = "the last date on which the receipt was updated", example = "2021-08-08")
     private LocalDate lastEditDate;
 
+    @Schema(description = "the average rating for the receipt", example = "7.25")
+    private Double rating;
+
 }
