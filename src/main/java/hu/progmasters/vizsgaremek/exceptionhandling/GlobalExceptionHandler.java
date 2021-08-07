@@ -7,7 +7,7 @@ public class GlobalExceptionHandler {
 
     //NoAuthorityForActionException
     //RatingNotFoundException
-    //ReceiptNotFoundException
+    //RecipeNotFoundException
     //UserNotFoundException
     //EmailIsAlreadyInUseException
 

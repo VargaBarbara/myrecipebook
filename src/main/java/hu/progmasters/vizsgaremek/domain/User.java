@@ -1,6 +1,5 @@
 package hu.progmasters.vizsgaremek.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,13 +17,13 @@ public class User {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", unique = true, nullable = false, length = 255)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)                //TODO column vagy joincolumn?
-    private List<Receipt> receipts;
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private List<Recipe> recipes;
 
 }

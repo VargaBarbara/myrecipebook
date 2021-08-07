@@ -19,6 +19,6 @@ public class UserInfo {
     @Schema(description = "the user's email", example = "snow.white1999@example.com")
     private String email;
 
-    private List<ReceiptInfo> receipts;
+    private List<RecipeInfo> recipes;
 
 }

@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface RatingRepository {
 
     Optional<Rating> saveRating(Rating toSave);
-    Optional<Double> getAverageRating(Integer receiptId);
+    Optional<Double> getAverageRating(Integer recipeId);
     List<Rating> findAllByUser(Integer userId);
-    Optional<Rating> findByUserAndReceipt(Integer userId, Integer receiptId);
+    Optional<Rating> findByUserAndRecipe(Integer userId, Integer recipeId);
     Optional<Rating> updateRating(Rating toUpdate);
     Optional<Rating> deleteRating(Rating toDelete);
 }

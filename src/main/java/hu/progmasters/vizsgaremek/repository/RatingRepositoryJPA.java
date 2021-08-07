@@ -22,12 +22,12 @@ public class RatingRepositoryJPA implements RatingRepository{
     }
 
     @Override
-    public Optional<Double> getAverageRating(Integer receiptId) {
+    public Optional<Double> getAverageRating(Integer recipeId) {
         Optional<Double> toReturn;
         try {
             toReturn = Optional.of(entityManager.createQuery("SELECT AVG(r.fingers) FROM Rating r " +
-                    "WHERE r.receipt.id = :receiptId", Double.class)
-                    .setParameter("receiptId", receiptId).getSingleResult());
+                    "WHERE r.recipe.id = :recipeId", Double.class)
+                    .setParameter("recipeId", recipeId).getSingleResult());
         } catch (NoResultException | NullPointerException exception) {
             toReturn = Optional.empty();
         }
@@ -42,12 +42,12 @@ public class RatingRepositoryJPA implements RatingRepository{
     }
 
     @Override
-    public Optional<Rating> findByUserAndReceipt(Integer userId, Integer receiptId) {
+    public Optional<Rating> findByUserAndRecipe(Integer userId, Integer recipeId) {
         Optional<Rating> toReturn;
         try {
             toReturn = Optional.of(entityManager.createQuery("SELECT r FROM Rating r " +
-                    "WHERE r.receipt.id = :receiptId AND r.user.id = :userId", Rating.class)
-                    .setParameter("receiptId", receiptId).setParameter("userId", userId).getSingleResult());
+                    "WHERE r.recipe.id = :recipeId AND r.user.id = :userId", Rating.class)
+                    .setParameter("recipeId", recipeId).setParameter("userId", userId).getSingleResult());
         } catch (NoResultException noResultException) {
             toReturn = Optional.empty();
         }

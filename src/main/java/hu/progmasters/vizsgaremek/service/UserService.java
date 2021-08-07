@@ -1,12 +1,12 @@
 package hu.progmasters.vizsgaremek.service;
 
 import hu.progmasters.vizsgaremek.domain.Rating;
-import hu.progmasters.vizsgaremek.domain.Receipt;
+import hu.progmasters.vizsgaremek.domain.Recipe;
 import hu.progmasters.vizsgaremek.domain.User;
 import hu.progmasters.vizsgaremek.dto.*;
 import hu.progmasters.vizsgaremek.exceptionhandling.*;
 import hu.progmasters.vizsgaremek.repository.RatingRepository;
-import hu.progmasters.vizsgaremek.repository.ReceiptRepository;
+import hu.progmasters.vizsgaremek.repository.RecipeRepository;
 import hu.progmasters.vizsgaremek.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
 
-    private ReceiptRepository receiptRepository;
+    private RecipeRepository recipeRepository;
     private RatingRepository ratingRepository;
     private UserRepository userRepository;
     private ModelMapper modelMapper;
 
-    public UserService(ReceiptRepository receiptRepository,
+    public UserService(RecipeRepository recipeRepository,
                        RatingRepository ratingRepository,
                        UserRepository userRepository,
                        ModelMapper modelMapper) {
-        this.receiptRepository = receiptRepository;
+        this.recipeRepository = recipeRepository;
         this.ratingRepository = ratingRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
@@ -41,12 +41,12 @@ public class UserService {
 
     public UserInfo saveUser(UserCreateUpdateCommand command) {
         Optional<User> userWithEmail = userRepository.findByEmail(command.getEmail());
-        if (!userWithEmail.isEmpty()) {
+        if (userWithEmail.isPresent()) {
             throw new EmailIsAlreadyInUseException();
         }
         User toSave = modelMapper.map(command, User.class);
         toSave.setId(null);
-        toSave.setReceipts(new ArrayList<>());
+        toSave.setRecipes(new ArrayList<>());
         User saved = userRepository.save(toSave).get();
         return modelMapper.map(saved, UserInfo.class);
     }
@@ -74,7 +74,7 @@ public class UserService {
         } else if(!toUpdate.getId().equals(loggedInUserId)) {
             throw new NoAuthorityForActionException();
         }
-        toUpdate.setReceipts(oldUser.get().getReceipts());
+        toUpdate.setRecipes(oldUser.get().getRecipes());
 
         User saved = userRepository.update(toUpdate).get();
         return convertUserToUserInfo(saved);
@@ -91,11 +91,11 @@ public class UserService {
         return convertUserToUserInfo(deleted);
     }
 
-    //Receipt methods
+    //Recipe methods
 
-    public ReceiptInfo saveReceipt(Integer userId, LocalDate creationDate, ReceiptCreateUpdateCommand command) {
-        // Mapping to Receipt
-        Receipt toSave = modelMapper.map(command, Receipt.class);
+    public RecipeInfo saveRecipe(Integer userId, LocalDate creationDate, RecipeCreateUpdateCommand command) {
+        // Mapping to Recipe
+        Recipe toSave = modelMapper.map(command, Recipe.class);
         toSave.setId(null);
         Optional<User> userToSet = userRepository.findById(userId);
         if (userToSet.isEmpty()) {
@@ -105,86 +105,86 @@ public class UserService {
         toSave.setCreationDate(creationDate);
         toSave.setLastEditDate(creationDate);
         //Save and mapping to Info
-        Receipt saved = receiptRepository.save(toSave).get();
-        return convertReceiptToReceiptInfo(saved);
+        Recipe saved = recipeRepository.save(toSave).get();
+        return convertRecipeToRecipeInfo(saved);
     }
 
-    public List<ReceiptInfo> findAllReceipts() {
-        List<Receipt> receipts = receiptRepository.findAll();
-        return receipts.stream()
-                .map(this::convertReceiptToReceiptInfo).collect(Collectors.toList());
+    public List<RecipeInfo> findAllRecipes() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        return recipes.stream()
+                .map(this::convertRecipeToRecipeInfo).collect(Collectors.toList());
     }
 
-    public ReceiptInfo findReceiptById(Integer receiptId) {
-        Optional<Receipt> receipt = receiptRepository.findById(receiptId);
-        if (receipt.isEmpty()) {
-            throw new ReceiptNotFoundException();
+    public RecipeInfo findRecipeById(Integer recipeId) {
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+        if (recipe.isEmpty()) {
+            throw new RecipeNotFoundException();
         }
-        return convertReceiptToReceiptInfo(receipt.get());
+        return convertRecipeToRecipeInfo(recipe.get());
     }
 
-    public List<ReceiptInfo> findReceiptsByUser(Integer userId) {
-        List<Receipt> receipts = receiptRepository.findByUser(userId);
-        return receipts.stream()
-                .map(this::convertReceiptToReceiptInfo).collect(Collectors.toList());
+    public List<RecipeInfo> findRecipesByUser(Integer userId) {
+        List<Recipe> recipes = recipeRepository.findByUser(userId);
+        return recipes.stream()
+                .map(this::convertRecipeToRecipeInfo).collect(Collectors.toList());
     }
 
-    public ReceiptInfo updateReceipt(Integer receiptId, Integer userId,
-                                     LocalDate editDate, ReceiptCreateUpdateCommand command) {
+    public RecipeInfo updateRecipe(Integer recipeId, Integer userId,
+                                   LocalDate editDate, RecipeCreateUpdateCommand command) {
 
-        Optional<Receipt> toUpdate = receiptRepository.findById(receiptId);
+        Optional<Recipe> toUpdate = recipeRepository.findById(recipeId);
         if (toUpdate.isEmpty()) {
-          throw new ReceiptNotFoundException();
+          throw new RecipeNotFoundException();
         } else if (!userId.equals(toUpdate.get().getCreator().getId())) {
             throw new NoAuthorityForActionException();
         }
         toUpdate.get().setPreparation(command.getPreparation());
         toUpdate.get().setNote(command.getNote());
         toUpdate.get().setLastEditDate(editDate);
-        Receipt updated = receiptRepository.update(toUpdate.get()).get();
-        return convertReceiptToReceiptInfo(updated);
+        Recipe updated = recipeRepository.update(toUpdate.get()).get();
+        return convertRecipeToRecipeInfo(updated);
     }
 
-    public ReceiptInfo deleteReceipt(Integer receiptId, Integer userId) {
-        Optional<Receipt> toDelete = receiptRepository.findById(receiptId);
+    public RecipeInfo deleteRecipe(Integer recipeId, Integer userId) {
+        Optional<Recipe> toDelete = recipeRepository.findById(recipeId);
         if (toDelete.isEmpty()) {
-            throw new ReceiptNotFoundException();
+            throw new RecipeNotFoundException();
         } else if (!userId.equals(toDelete.get().getCreator().getId())) {
             throw new NoAuthorityForActionException();
         }
-        Receipt deleted = receiptRepository.delete(toDelete.get()).get();
-        return convertReceiptToReceiptInfo(deleted);
+        Recipe deleted = recipeRepository.delete(toDelete.get()).get();
+        return convertRecipeToRecipeInfo(deleted);
     }
 
     //Rating methods
 
-    public RatingInfo saveOrUpdateRating(Integer userId, Integer receiptId, RatingCreateUpdateCommand command) {
+    public RatingInfo saveOrUpdateRating(Integer userId, Integer recipeId, RatingCreateUpdateCommand command) {
         RatingInfo toReturn;
-        if (ratingRepository.findByUserAndReceipt(userId, receiptId).isEmpty()) {
-            toReturn = saveRating(userId, receiptId, command);
+        if (ratingRepository.findByUserAndRecipe(userId, recipeId).isEmpty()) {
+            toReturn = saveRating(userId, recipeId, command);
         } else {
-            toReturn = updateRating(userId, receiptId, command);
+            toReturn = updateRating(userId, recipeId, command);
         }
         return toReturn;
     }
 
-    public RatingInfo saveRating(Integer userId, Integer receiptId, RatingCreateUpdateCommand command) {
-        Optional<Receipt> receipt = receiptRepository.findById(receiptId);
+    public RatingInfo saveRating(Integer userId, Integer recipeId, RatingCreateUpdateCommand command) {
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         Optional<User> user = userRepository.findById(userId);
-        if (receipt.isEmpty()) {
-            throw new ReceiptNotFoundException();
+        if (recipe.isEmpty()) {
+            throw new RecipeNotFoundException();
         } else if (user.isEmpty()) {
             throw new UserNotFoundException();
         }
         Rating toSave = modelMapper.map(command, Rating.class);
         toSave.setUser(user.get());
-        toSave.setReceipt(receipt.get());
+        toSave.setRecipe(recipe.get());
         Rating saved = ratingRepository.saveRating(toSave).get();
         return convertRatingToRatingInfo(saved);
     }
 
-    public RatingInfo findRatingByUserAndReceipt(Integer userId, Integer receiptId) {
-        Optional<Rating> rating = ratingRepository.findByUserAndReceipt(userId, receiptId);
+    public RatingInfo findRatingByUserAndRecipe(Integer userId, Integer recipeId) {
+        Optional<Rating> rating = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (rating.isEmpty()) {
             throw new RatingNotFoundException();
         }
@@ -196,9 +196,9 @@ public class UserService {
         return ratings.stream().map(this::convertRatingToRatingInfo).collect(Collectors.toList());
     }
 
-    public RatingInfo updateRating(Integer userId, Integer receiptId, RatingCreateUpdateCommand command) {
+    public RatingInfo updateRating(Integer userId, Integer recipeId, RatingCreateUpdateCommand command) {
         //itt nincs szükség jogosultság ellenőrzésre, mert a userId @PathVariable, nem @RequestParam
-        Optional<Rating> toUpdate = ratingRepository.findByUserAndReceipt(userId, receiptId);
+        Optional<Rating> toUpdate = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (toUpdate.isEmpty()) {
             throw new RatingNotFoundException();
         }
@@ -207,9 +207,9 @@ public class UserService {
         return convertRatingToRatingInfo(updated);
     }
 
-    public RatingInfo deleteRating(Integer userId, Integer receiptId) {
+    public RatingInfo deleteRating(Integer userId, Integer recipeId) {
         //itt nincs szükség jogosultság ellenőrzésre, mert a userId @PathVariable, nem @RequestParam
-        Optional<Rating> toDelete = ratingRepository.findByUserAndReceipt(userId, receiptId);
+        Optional<Rating> toDelete = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (toDelete.isEmpty()) {
             throw new RatingNotFoundException();
         }
@@ -221,29 +221,29 @@ public class UserService {
 
     private UserInfo convertUserToUserInfo(User user) {
         UserInfo userInfo = modelMapper.map(user, UserInfo.class);
-        List<ReceiptInfo> receiptInfos = user.getReceipts().stream()
-                .map(this::convertReceiptToReceiptInfo).collect(Collectors.toList());
-        userInfo.setReceipts(receiptInfos);
+        List<RecipeInfo> recipeInfos = user.getRecipes().stream()
+                .map(this::convertRecipeToRecipeInfo).collect(Collectors.toList());
+        userInfo.setRecipes(recipeInfos);
         return userInfo;
     }
 
-    private ReceiptInfo convertReceiptToReceiptInfo(Receipt receipt) {
-        ReceiptInfo receiptInfo = modelMapper.map(receipt, ReceiptInfo.class);
-        receiptInfo.setCreatorId(receipt.getCreator().getId());
-        Optional<Double> averageRating = ratingRepository.getAverageRating(receipt.getId());
+    private RecipeInfo convertRecipeToRecipeInfo(Recipe recipe) {
+        RecipeInfo recipeInfo = modelMapper.map(recipe, RecipeInfo.class);
+        recipeInfo.setCreatorId(recipe.getCreator().getId());
+        Optional<Double> averageRating = ratingRepository.getAverageRating(recipe.getId());
         if (averageRating.isEmpty()) {
-            receiptInfo.setRating(0.0);
+            recipeInfo.setRating(0.0);
         } else {
             Double avgRating = (double) Math.round(averageRating.get()*100)/100;
-            receiptInfo.setRating(avgRating);
+            recipeInfo.setRating(avgRating);
         }
-        return receiptInfo;
+        return recipeInfo;
     }
 
     private RatingInfo convertRatingToRatingInfo(Rating rating) {
         RatingInfo ratingInfo = modelMapper.map(rating, RatingInfo.class);
         ratingInfo.setUserId(rating.getUser().getId());
-        ratingInfo.setReceiptId(rating.getReceipt().getId());
+        ratingInfo.setRecipeId(rating.getRecipe().getId());
         return ratingInfo;
     }
 }

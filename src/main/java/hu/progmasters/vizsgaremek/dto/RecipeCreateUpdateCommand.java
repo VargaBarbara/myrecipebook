@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ReceiptCreateUpdateCommand {
+public class RecipeCreateUpdateCommand {
 
     @Schema(description = "the preparation of the food",
             example = "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.")

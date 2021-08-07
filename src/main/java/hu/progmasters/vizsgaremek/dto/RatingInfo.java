@@ -14,8 +14,8 @@ public class RatingInfo {
     @Schema(description = "the user's id", example = "1")
     private Integer userId;
 
-    @Schema(description = "the receipt's id", example = "1")
-    private Integer receiptId;
+    @Schema(description = "the recipe's id", example = "1")
+    private Integer recipeId;
 
     @Schema(description = "rating - the number of licked fingers", example = "7")
     private Integer fingers;

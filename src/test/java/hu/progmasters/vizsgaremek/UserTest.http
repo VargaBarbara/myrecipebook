@@ -90,10 +90,10 @@ GET http://localhost:8080/api/users
 Content-Type: application/json
 Accept: application/json
 
-###Receipt methods-----------------------------------------------------------------------------------------------------
+###Recipe methods-----------------------------------------------------------------------------------------------------
 
-###  saveReceipt
-POST http://localhost:8080/api/receipts?userId=1
+###  saveRecipe
+POST http://localhost:8080/api/recipes?userId=1
 Content-Type: application/json
 Accept: application/json
 
@@ -102,8 +102,8 @@ Accept: application/json
   "note" : "Néha amaz is kell bele. Néha."
 }
 
-###  saveReceipt
-POST http://localhost:8080/api/receipts?userId=1
+###  saveRecipe
+POST http://localhost:8080/api/recipes?userId=1
 Content-Type: application/json
 Accept: application/json
 
@@ -112,8 +112,8 @@ Accept: application/json
   "note" : "Néha amaz is kell bele. Néha."
 }
 
-###  saveReceipt
-POST http://localhost:8080/api/receipts?userId=1
+###  saveRecipe
+POST http://localhost:8080/api/recipes?userId=1
 Content-Type: application/json
 Accept: application/json
 
@@ -122,8 +122,8 @@ Accept: application/json
   "note" : "Néha amaz is kell bele. Néha."
 }
 
-###  saveReceipt
-POST http://localhost:8080/api/receipts?userId=3
+###  saveRecipe
+POST http://localhost:8080/api/recipes?userId=3
 Content-Type: application/json
 Accept: application/json
 
@@ -132,23 +132,23 @@ Accept: application/json
   "note" : "Néha amaz is kell bele. Néha."
 }
 
-### findAllReceipts
-GET http://localhost:8080/api/receipts
+### findAllRecipes
+GET http://localhost:8080/api/recipes
 Content-Type: application/json
 Accept: application/json
 
-### findReceiptById
-GET http://localhost:8080/api/receipts/receipt/3
+### findRecipeById
+GET http://localhost:8080/api/recipes/recipe/3
 Content-Type: application/json
 Accept: application/json
 
-### findReceiptsByUser
-GET http://localhost:8080/api/receipts/user/1
+### findRecipesByUser
+GET http://localhost:8080/api/recipes/user/1
 Content-Type: application/json
 Accept: application/json
 
-### updateReceipt
-PUT http://localhost:8080/api/receipts/1?userId=1
+### updateRecipe
+PUT http://localhost:8080/api/recipes/1?userId=1
 Content-Type: application/json
 Accept: application/json
 
@@ -157,13 +157,13 @@ Accept: application/json
   "note" : "Érdemes belőle 2 adagot készíteni, hogy a későn érkezőknek is jusson."
 }
 
-### findAllReceipts
-GET http://localhost:8080/api/receipts
+### findAllRecipes
+GET http://localhost:8080/api/recipes
 Content-Type: application/json
 Accept: application/json
 
-### updateReceipt rossz jogosultsággal - NoAuthorityForActionException
-PUT http://localhost:8080/api/receipts/2?userId=2
+### updateRecipe rossz jogosultsággal - NoAuthorityForActionException
+PUT http://localhost:8080/api/recipes/2?userId=2
 Content-Type: application/json
 Accept: application/json
 
@@ -172,28 +172,28 @@ Accept: application/json
   "note" : "Érdemes belőle 2 adagot készíteni, hogy a későn érkezőknek is jusson."
 }
 
-### findAllReceipts
-GET http://localhost:8080/api/receipts
+### findAllRecipes
+GET http://localhost:8080/api/recipes
 Content-Type: application/json
 Accept: application/json
 
-### deleteReceipt
-DELETE http://localhost:8080/api/receipts/2?userId=1
+### deleteRecipe
+DELETE http://localhost:8080/api/recipes/2?userId=1
 Content-Type: application/json
 Accept: application/json
 
-### findAllReceipts
-GET http://localhost:8080/api/receipts
+### findAllRecipes
+GET http://localhost:8080/api/recipes
 Content-Type: application/json
 Accept: application/json
 
-### deleteReceipt rossz jogosultsággal - NoAuthorityForActionException
-DELETE http://localhost:8080/api/receipts/1?userId=2
+### deleteRecipe rossz jogosultsággal - NoAuthorityForActionException
+DELETE http://localhost:8080/api/recipes/1?userId=2
 Content-Type: application/json
 Accept: application/json
 
-### findAllReceipts
-GET http://localhost:8080/api/receipts
+### findAllRecipes
+GET http://localhost:8080/api/recipes
 Content-Type: application/json
 Accept: application/json
 
@@ -235,7 +235,7 @@ Accept: application/json
   "fingers": 9
 }
 
-###  findRatingByUserAndReceipt
+###  findRatingByUserAndRecipe
 GET http://localhost:8080/api/users/3/ratings/1
 Content-Type: application/json
 Accept: application/json

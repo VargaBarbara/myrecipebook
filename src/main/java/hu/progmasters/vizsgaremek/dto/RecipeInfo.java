@@ -8,9 +8,9 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class ReceiptInfo {
+public class RecipeInfo {
 
-    @Schema(description = "the receipt's id", example = "1")
+    @Schema(description = "the recipe's id", example = "1")
     private Integer id;
 
     @Schema(description = "the preparation of the food",
@@ -24,13 +24,13 @@ public class ReceiptInfo {
     @Schema(description = "the creator user's id", example = "1")
     private Integer creatorId;
 
-    @Schema(description = "the date on which the receipt was created", example = "2021-08-07")
+    @Schema(description = "the date on which the recipe was created", example = "2021-08-07")
     private LocalDate creationDate;
 
-    @Schema(description = "the last date on which the receipt was updated", example = "2021-08-08")
+    @Schema(description = "the last date on which the recipe was updated", example = "2021-08-08")
     private LocalDate lastEditDate;
 
-    @Schema(description = "the average rating for the receipt", example = "7.25")
+    @Schema(description = "the average rating for the recipe", example = "7.25")
     private Double rating;
 
 }

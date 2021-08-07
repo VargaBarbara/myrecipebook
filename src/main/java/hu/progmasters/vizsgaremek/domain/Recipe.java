@@ -1,6 +1,5 @@
 package hu.progmasters.vizsgaremek.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +10,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "receipt")
-public class Receipt {
+@Table(name = "recipe")
+public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +21,11 @@ public class Receipt {
     @Column(name = "preparation", length = 4000, nullable = false)
     private String preparation;
 
-    @Column(name = "note", length = 255, nullable = true)
+    @Column(name = "note")
     private String note;
 
     @ManyToOne
-    //@Column(name = "creator_id", nullable = false)                   //TODO  vagy joincolumn?
+    @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
     @Column(name = "creation_date", nullable = false)
@@ -34,8 +33,5 @@ public class Receipt {
 
     @Column(name = "last_edit_date", nullable = false)
     private LocalDate lastEditDate;
-
-    //@Column(name = "rating")
-    //private Double rating;
 
 }

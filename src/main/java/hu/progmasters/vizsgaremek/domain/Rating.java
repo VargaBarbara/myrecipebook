@@ -17,12 +17,12 @@ public class Rating {
     private Integer id;
 
     @ManyToOne
-    //@JoinColumn(name = "user_id", nullable = false)
-    private User user;  //TODO
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    //@JoinColumn(name = "receipt_id", nullable = false)      //TODO column vagy joincolumn?
-    private Receipt receipt;  //TODO
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 
     @Column(name = "fingers", nullable = false)
     private Integer fingers;                                    //TODO min-max

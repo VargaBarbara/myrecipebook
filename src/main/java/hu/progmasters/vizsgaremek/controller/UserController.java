@@ -26,7 +26,7 @@ public class UserController {
         this.service = service;
     }
 
-    //User methods
+    //User methods------------------------------------------------------------------------------------------------
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,47 +69,39 @@ public class UserController {
         return service.deleteUser(toDeleteId, loggedInUserId);
     }
 
+    //Rating methods-------------------------------------------------------------------------------------------
 
-
-
-    //Rating methods
-
-
-/*
-    Double getAverageRating(Integer id);                            -- nem kell a controllerig eljutnia!
-    */
-
-    @PostMapping("/{userId}/ratings/{receiptId}")
+    @PostMapping("/{userId}/ratings/{recipeId}")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "saves rating")
     @ApiResponse(responseCode = "201", description = "rating saved")
-    public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer receiptId,
+    public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer recipeId,
                                  @RequestBody RatingCreateUpdateCommand command){
-        return service.saveOrUpdateRating(userId, receiptId, command);
+        return service.saveOrUpdateRating(userId, recipeId, command);
     }
 
-    @GetMapping("/{userId}/ratings/{receiptId}")
+    @GetMapping("/{userId}/ratings/{recipeId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "returns one specific rating")
     @ApiResponse(responseCode = "200", description = "specific rating returned")
-    public RatingInfo findRatingByUserAndReceipt(@PathVariable Integer userId, @PathVariable Integer receiptId){
-        return service.findRatingByUserAndReceipt(userId, receiptId);
+    public RatingInfo findRatingByUserAndRecipe(@PathVariable Integer userId, @PathVariable Integer recipeId){
+        return service.findRatingByUserAndRecipe(userId, recipeId);
     }
 
     @GetMapping("/{userId}/ratings/")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "returns all ratings given by a specific user")
-    @ApiResponse(responseCode = "200", description = "all receipts listed")
+    @ApiResponse(responseCode = "200", description = "all ratings listed")
     public List<RatingInfo> findAllRatingsByUser(@PathVariable Integer userId){
         return service.findAllRatingsByUser(userId);
     }
 
-    @DeleteMapping("/{userId}/ratings/{receiptId}")
+    @DeleteMapping("/{userId}/ratings/{recipeId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "deletes one specific rating")
     @ApiResponse(responseCode = "200", description = "specific rating deleted")
-    public RatingInfo deleteRating(@PathVariable Integer userId, @PathVariable Integer receiptId){
-        return service.deleteRating(userId, receiptId);
+    public RatingInfo deleteRating(@PathVariable Integer userId, @PathVariable Integer recipeId){
+        return service.deleteRating(userId, recipeId);
     }
 
 }

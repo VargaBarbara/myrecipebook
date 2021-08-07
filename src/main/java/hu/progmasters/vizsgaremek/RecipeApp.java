@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class ReceiptApp {
+public class RecipeApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(ReceiptApp.class, args);
+        SpringApplication.run(RecipeApp.class, args);
     }
 
     @Bean
@@ -21,12 +21,11 @@ public class ReceiptApp {
         return new ObjectMapper().findAndRegisterModules();
     }
 
-    //TODO swagger - only rating left (for domains too?)
-    //TODO postman - only rating left
     //TODO column name
     //TODO tests
     //TODO optional new banner
     //TODO validation
 
+    //TODO update potato diagram
 
 }
