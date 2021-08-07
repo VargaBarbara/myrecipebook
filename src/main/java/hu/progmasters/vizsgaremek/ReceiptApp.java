@@ -27,8 +27,9 @@ public class ReceiptApp {
     //TODO tests
     //TODO optional new banner
     //TODO validation
-    //TODO jogosultságok
     //TODO adott email címmel regisztráltak-e már
+
+    //TODO http tesztek átszervezése folyamattá
 
 
 }

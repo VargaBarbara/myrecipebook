@@ -115,7 +115,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "fingers": 6
+  "fingers": 8
 }
 
 ###  findRatingByUserAndReceipt
@@ -130,6 +130,6 @@ Accept: application/json
 
 
 ###  deleteRating
-DELETE http://localhost:8080/api/users/1/ratings/2
+DELETE http://localhost:8080/api/users/1/ratings/1
 Content-Type: application/json
 Accept: application/json

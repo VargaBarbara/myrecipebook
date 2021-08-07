@@ -67,12 +67,12 @@ public class UserService {
     public UserInfo updateUser(Integer toUpdateId, Integer loggedInUserId, UserCreateUpdateCommand command) {
         Optional<User> oldUser = userRepository.findById(toUpdateId);
         User toUpdate = modelMapper.map(command, User.class);
+        toUpdate.setId(toUpdateId);
         if (oldUser.isEmpty()) {
             throw new UserNotFoundException();
         } else if(!toUpdate.getId().equals(loggedInUserId)) {
             throw new NoAuthorityForActionException();
         }
-        toUpdate.setId(toUpdateId);
         toUpdate.setReceipts(oldUser.get().getReceipts());
 
         User saved = userRepository.update(toUpdate).get();
