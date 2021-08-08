@@ -42,7 +42,7 @@ public class UserService {
     public UserInfo saveUser(UserCreateUpdateCommand command) {
         Optional<User> userWithEmail = userRepository.findByEmail(command.getEmail());
         if (userWithEmail.isPresent()) {
-            throw new EmailIsAlreadyInUseException();
+            throw new EmailIsAlreadyInUseException(command.getEmail());
         }
         User toSave = modelMapper.map(command, User.class);
         toSave.setId(null);
@@ -60,7 +60,7 @@ public class UserService {
     public UserInfo findUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(id);
         }
         return convertUserToUserInfo(user.get());
     }
@@ -70,9 +70,9 @@ public class UserService {
         User toUpdate = modelMapper.map(command, User.class);
         toUpdate.setId(toUpdateId);
         if (oldUser.isEmpty()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(toUpdateId);
         } else if(!toUpdate.getId().equals(loggedInUserId)) {
-            throw new NoAuthorityForActionException();
+            throw new NoAuthorityForActionException(loggedInUserId, toUpdateId);
         }
         toUpdate.setRecipes(oldUser.get().getRecipes());
 
@@ -83,9 +83,9 @@ public class UserService {
     public UserInfo deleteUser(Integer toDeleteId, Integer loggedInUserId) {
         Optional<User> toDelete = userRepository.findById(toDeleteId);
         if (toDelete.isEmpty()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(toDeleteId);
         } else if(!toDelete.get().getId().equals(loggedInUserId)) {
-            throw new NoAuthorityForActionException();
+            throw new NoAuthorityForActionException(loggedInUserId, toDeleteId);
         }
         User deleted = userRepository.delete(toDelete.get()).get();
         return convertUserToUserInfo(deleted);
@@ -99,7 +99,7 @@ public class UserService {
         toSave.setId(null);
         Optional<User> userToSet = userRepository.findById(userId);
         if (userToSet.isEmpty()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(userId);
         }
         toSave.setCreator(userToSet.get());
         toSave.setCreationDate(creationDate);
@@ -118,7 +118,7 @@ public class UserService {
     public RecipeInfo findRecipeById(Integer recipeId) {
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         if (recipe.isEmpty()) {
-            throw new RecipeNotFoundException();
+            throw new RecipeNotFoundException(recipeId);
         }
         return convertRecipeToRecipeInfo(recipe.get());
     }
@@ -134,9 +134,9 @@ public class UserService {
 
         Optional<Recipe> toUpdate = recipeRepository.findById(recipeId);
         if (toUpdate.isEmpty()) {
-          throw new RecipeNotFoundException();
+          throw new RecipeNotFoundException(recipeId);
         } else if (!userId.equals(toUpdate.get().getCreator().getId())) {
-            throw new NoAuthorityForActionException();
+            throw new NoAuthorityForActionException(userId, toUpdate.get().getCreator().getId());
         }
         toUpdate.get().setPreparation(command.getPreparation());
         toUpdate.get().setNote(command.getNote());
@@ -148,9 +148,9 @@ public class UserService {
     public RecipeInfo deleteRecipe(Integer recipeId, Integer userId) {
         Optional<Recipe> toDelete = recipeRepository.findById(recipeId);
         if (toDelete.isEmpty()) {
-            throw new RecipeNotFoundException();
+            throw new RecipeNotFoundException(recipeId);
         } else if (!userId.equals(toDelete.get().getCreator().getId())) {
-            throw new NoAuthorityForActionException();
+            throw new NoAuthorityForActionException(userId, toDelete.get().getCreator().getId());
         }
         Recipe deleted = recipeRepository.delete(toDelete.get()).get();
         return convertRecipeToRecipeInfo(deleted);
@@ -172,9 +172,9 @@ public class UserService {
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         Optional<User> user = userRepository.findById(userId);
         if (recipe.isEmpty()) {
-            throw new RecipeNotFoundException();
+            throw new RecipeNotFoundException(recipeId);
         } else if (user.isEmpty()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(userId);
         }
         Rating toSave = modelMapper.map(command, Rating.class);
         toSave.setUser(user.get());
@@ -186,7 +186,7 @@ public class UserService {
     public RatingInfo findRatingByUserAndRecipe(Integer userId, Integer recipeId) {
         Optional<Rating> rating = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (rating.isEmpty()) {
-            throw new RatingNotFoundException();
+            throw new RatingNotFoundException(userId, recipeId);
         }
         return convertRatingToRatingInfo(rating.get());
     }
@@ -200,7 +200,7 @@ public class UserService {
         //itt nincs szükség jogosultság ellenőrzésre, mert a userId @PathVariable, nem @RequestParam
         Optional<Rating> toUpdate = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (toUpdate.isEmpty()) {
-            throw new RatingNotFoundException();
+            throw new RatingNotFoundException(userId, recipeId);
         }
         toUpdate.get().setFingers(command.getFingers());
         Rating updated = ratingRepository.updateRating(toUpdate.get()).get();
@@ -211,7 +211,7 @@ public class UserService {
         //itt nincs szükség jogosultság ellenőrzésre, mert a userId @PathVariable, nem @RequestParam
         Optional<Rating> toDelete = ratingRepository.findByUserAndRecipe(userId, recipeId);
         if (toDelete.isEmpty()) {
-            throw new RatingNotFoundException();
+            throw new RatingNotFoundException(userId, recipeId);
         }
         Rating deleted = ratingRepository.deleteRating(toDelete.get()).get();
         return convertRatingToRatingInfo(deleted);

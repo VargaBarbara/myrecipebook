@@ -25,6 +25,6 @@ public class Rating {
     private Recipe recipe;
 
     @Column(name = "fingers", nullable = false)
-    private Integer fingers;                                    //TODO min-max
+    private Integer fingers;
 
 }

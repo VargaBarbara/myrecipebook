@@ -217,7 +217,7 @@ Accept: application/json
   "fingers": 6
 }
 
-###  saveRating - módosítás
+###  saveRating
 POST http://localhost:8080/api/users/3/ratings/1
 Content-Type: application/json
 Accept: application/json
@@ -226,7 +226,7 @@ Accept: application/json
   "fingers": 7
 }
 
-###  saveRating - módosítás
+###  saveRating
 POST http://localhost:8080/api/users/3/ratings/3
 Content-Type: application/json
 Accept: application/json

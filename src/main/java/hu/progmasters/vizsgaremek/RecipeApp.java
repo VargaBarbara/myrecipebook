@@ -21,10 +21,8 @@ public class RecipeApp {
         return new ObjectMapper().findAndRegisterModules();
     }
 
-    //TODO column name
     //TODO tests
     //TODO optional new banner
-    //TODO validation
 
     //TODO update potato diagram
 
