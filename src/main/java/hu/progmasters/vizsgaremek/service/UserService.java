@@ -37,8 +37,6 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
-    //TODO exception-ök feltöltése adattal
-
     public UserInfo saveUser(UserCreateUpdateCommand command) {
         Optional<User> userWithEmail = userRepository.findByEmail(command.getEmail());
         if (userWithEmail.isPresent()) {

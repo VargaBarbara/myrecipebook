@@ -40,21 +40,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ValidationError>> handleUserNotFoundException(UserNotFoundException exception) {
         ValidationError validationError = new ValidationError("userID", "user with id " +
                 exception.getUserId() + " is not found");
-        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RecipeNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleRecipeNotFoundException(RecipeNotFoundException exception) {
         ValidationError validationError = new ValidationError("recipeId", "user with id " +
                 exception.getRecipeId() + " is not found");
-        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RatingNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleRatingNotFoundException(RatingNotFoundException exception) {
         ValidationError validationError = new ValidationError("userId and recipeId", "rating by user " +
                 exception.getUserId() + " for recipe " + exception.getRecipeId() + " is not found");
-        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoAuthorityForActionException.class)
