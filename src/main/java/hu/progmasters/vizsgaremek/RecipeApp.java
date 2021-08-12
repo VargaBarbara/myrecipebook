@@ -21,9 +21,10 @@ public class RecipeApp {
         return new ObjectMapper().findAndRegisterModules();
     }
 
-    //TODO tests
+    //TODO tests with orders (in end-to-end integration tests), unit tests mainly for service
     //TODO optional new banner
-
+    //TODO random recipe
+    //TODO delete recipes if delete user?
     //TODO update potato diagram
 
 }

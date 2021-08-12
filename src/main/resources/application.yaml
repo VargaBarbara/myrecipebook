@@ -8,7 +8,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate #update flyway nélkül
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
