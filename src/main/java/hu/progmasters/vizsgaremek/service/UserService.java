@@ -78,14 +78,39 @@ public class UserService {
         return convertUserToUserInfo(saved);
     }
 
-    public UserInfo deleteUser(Integer toDeleteId, Integer loggedInUserId) {
+    public UserInfo deleteUser(Integer toDeleteId, Integer loggedInUserId, Boolean deleteRecipes) {
         Optional<User> toDelete = userRepository.findById(toDeleteId);
+        UserInfo toReturn;
         if (toDelete.isEmpty()) {
             throw new UserNotFoundException(toDeleteId);
         } else if(!toDelete.get().getId().equals(loggedInUserId)) {
             throw new NoAuthorityForActionException(loggedInUserId, toDeleteId);
+        } else if(deleteRecipes) {
+            toReturn = deleteUserWithRecipes(toDelete.get());
+        } else {
+            toReturn = deleteUserWithoutRecipes(toDelete.get());
         }
-        User deleted = userRepository.delete(toDelete.get()).get();
+
+        return toReturn;
+    }
+
+    public UserInfo deleteUserWithRecipes(User toDelete) {
+        List<Recipe> toDeleteRecipes = toDelete.getRecipes();
+        for (Recipe recipe : toDeleteRecipes) {
+            recipeRepository.delete(recipe);
+        }
+        User deleted = userRepository.delete(toDelete).get();
+        deleted.setRecipes(toDeleteRecipes);
+        return convertUserToUserInfo(deleted);
+    }
+
+    public UserInfo deleteUserWithoutRecipes(User toDelete) {
+        List<Recipe> toDeleteRecipes = toDelete.getRecipes();
+        for (Recipe recipe : toDeleteRecipes) {
+            recipe.setCreator(null);
+        }
+        User deleted = userRepository.delete(toDelete).get();
+        deleted.setRecipes(List.of());
         return convertUserToUserInfo(deleted);
     }
 
@@ -227,7 +252,11 @@ public class UserService {
 
     private RecipeInfo convertRecipeToRecipeInfo(Recipe recipe) {
         RecipeInfo recipeInfo = modelMapper.map(recipe, RecipeInfo.class);
-        recipeInfo.setCreatorId(recipe.getCreator().getId());
+        try {
+            recipeInfo.setCreatorId(recipe.getCreator().getId());
+        } catch (NullPointerException exception) {
+            recipeInfo.setCreatorId(0);
+        }
         Optional<Double> averageRating = ratingRepository.getAverageRating(recipe.getId());
         if (averageRating.isEmpty()) {
             recipeInfo.setRating(0.0);

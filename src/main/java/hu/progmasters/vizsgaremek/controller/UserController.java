@@ -65,8 +65,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "deletes one specific user account")
     @ApiResponse(responseCode = "200", description = "specific user account deleted")
-    public UserInfo deleteUser(@PathVariable Integer toDeleteId, @RequestParam Integer loggedInUserId) {
-        return service.deleteUser(toDeleteId, loggedInUserId);
+    public UserInfo deleteUser(@PathVariable Integer toDeleteId, @RequestParam Integer loggedInUserId,
+                               @RequestParam Boolean deleteRecipes) {
+        return service.deleteUser(toDeleteId, loggedInUserId, deleteRecipes);
     }
 
     //Rating methods-------------------------------------------------------------------------------------------

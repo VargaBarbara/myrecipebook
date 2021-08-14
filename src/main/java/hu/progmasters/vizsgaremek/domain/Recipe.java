@@ -25,7 +25,7 @@ public class Recipe {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "creator_id")
     private User creator;
 
     @Column(name = "creation_date", nullable = false)
