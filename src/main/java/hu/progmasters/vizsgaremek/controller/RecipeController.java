@@ -50,6 +50,14 @@ public class RecipeController {
         return service.findRecipeById(recipeId);
     }
 
+    @GetMapping("/recipe/random")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "returns one specific recipe")
+    @ApiResponse(responseCode = "200", description = "specific recipe returned")
+    public RecipeInfo findRandomRecipe() {
+        return service.findRandomRecipe();
+    }
+
     @GetMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "returns all recipes with user id given")

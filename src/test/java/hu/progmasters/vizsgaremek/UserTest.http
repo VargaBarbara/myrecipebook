@@ -70,8 +70,13 @@ GET http://localhost:8080/api/users
 Content-Type: application/json
 Accept: application/json
 
-### deleteUser
-DELETE http://localhost:8080/api/users/2?loggedInUserId=2
+### deleteUser --- TODO minden esetre
+DELETE http://localhost:8080/api/users/2?loggedInUserId=2&deleteRecipes=false
+Content-Type: application/json
+Accept: application/json
+
+### deleteUser --- TODO minden esetre
+DELETE http://localhost:8080/api/users/1?loggedInUserId=1&deleteRecipes=false
 Content-Type: application/json
 Accept: application/json
 
@@ -123,6 +128,16 @@ Accept: application/json
 }
 
 ###  saveRecipe
+POST http://localhost:8080/api/recipes?userId=2
+Content-Type: application/json
+Accept: application/json
+
+{
+  "preparation": "Szóval ez ide, azt meg oda, majd összekevered, megsütöd és kész.",
+  "note" : "Néha amaz is kell bele. Néha."
+}
+
+###  saveRecipe
 POST http://localhost:8080/api/recipes?userId=3
 Content-Type: application/json
 Accept: application/json
@@ -139,6 +154,11 @@ Accept: application/json
 
 ### findRecipeById
 GET http://localhost:8080/api/recipes/recipe/3
+Content-Type: application/json
+Accept: application/json
+
+### findRandomRecipe
+GET http://localhost:8080/api/recipes/recipe/random
 Content-Type: application/json
 Accept: application/json
 

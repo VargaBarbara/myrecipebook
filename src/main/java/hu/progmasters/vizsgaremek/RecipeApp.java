@@ -23,7 +23,6 @@ public class RecipeApp {
 
     //TODO tests with orders (in end-to-end integration tests), unit tests mainly for service
     //TODO optional new banner
-    //TODO random recipe
     //TODO update potato diagram
 
 }

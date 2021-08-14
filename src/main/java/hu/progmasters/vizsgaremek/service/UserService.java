@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +37,8 @@ public class UserService {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
+
+    //User methods----------------------------------------------------------------------------------------------------
 
     public UserInfo saveUser(UserCreateUpdateCommand command) {
         Optional<User> userWithEmail = userRepository.findByEmail(command.getEmail());
@@ -114,7 +117,7 @@ public class UserService {
         return convertUserToUserInfo(deleted);
     }
 
-    //Recipe methods
+    //Recipe methods--------------------------------------------------------------------------------------------------
 
     public RecipeInfo saveRecipe(Integer userId, LocalDate creationDate, RecipeCreateUpdateCommand command) {
         // Mapping to Recipe
@@ -144,6 +147,12 @@ public class UserService {
             throw new RecipeNotFoundException(recipeId);
         }
         return convertRecipeToRecipeInfo(recipe.get());
+    }
+
+    public RecipeInfo findRandomRecipe() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        int random = ThreadLocalRandom.current().nextInt(0, recipes.size());
+        return convertRecipeToRecipeInfo(recipes.get(random));
     }
 
     public List<RecipeInfo> findRecipesByUser(Integer userId) {
@@ -179,7 +188,7 @@ public class UserService {
         return convertRecipeToRecipeInfo(deleted);
     }
 
-    //Rating methods
+    //Rating methods--------------------------------------------------------------------------------------------------
 
     public RatingInfo saveOrUpdateRating(Integer userId, Integer recipeId, RatingCreateUpdateCommand command) {
         RatingInfo toReturn;
@@ -240,7 +249,7 @@ public class UserService {
         return convertRatingToRatingInfo(deleted);
     }
 
-    //Converting methods
+    //Converting methods----------------------------------------------------------------------------------------------
 
     private UserInfo convertUserToUserInfo(User user) {
         UserInfo userInfo = modelMapper.map(user, UserInfo.class);
@@ -273,4 +282,5 @@ public class UserService {
         ratingInfo.setRecipeId(rating.getRecipe().getId());
         return ratingInfo;
     }
+
 }
