@@ -1,11 +1,13 @@
 package hu.progmasters.vizsgaremek.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class RatingInfo {
 
     @Schema(description = "the rating's id", example = "1")

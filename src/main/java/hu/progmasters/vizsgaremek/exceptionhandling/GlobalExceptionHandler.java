@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RecipeNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleRecipeNotFoundException(RecipeNotFoundException exception) {
-        ValidationError validationError = new ValidationError("recipeId", "user with id " +
+        ValidationError validationError = new ValidationError("recipeId", "recipe with id " +
                 exception.getRecipeId() + " is not found");
         return new ResponseEntity<>(List.of(validationError), HttpStatus.NOT_FOUND);
     }
