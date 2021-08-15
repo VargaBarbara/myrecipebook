@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "creates a user account")
     @ApiResponse(responseCode = "201", description = "user account has been created")
-    public UserInfo saveUser(@RequestBody UserCreateUpdateCommand command) {
+    public UserInfo saveUser(@Valid @RequestBody UserCreateUpdateCommand command) {
         return service.saveUser(command);
     }
 
@@ -57,7 +58,7 @@ public class UserController {
     @Operation(summary = "updates one specific user account")
     @ApiResponse(responseCode = "201", description = "specific user account updated")
     public UserInfo updateUser(@PathVariable Integer toUpdateId, @RequestParam Integer loggedInUserId,
-                               @RequestBody UserCreateUpdateCommand command) {
+                               @Valid @RequestBody UserCreateUpdateCommand command) {
         return service.updateUser(toUpdateId, loggedInUserId, command);
     }
 
@@ -66,7 +67,7 @@ public class UserController {
     @Operation(summary = "deletes one specific user account")
     @ApiResponse(responseCode = "200", description = "specific user account deleted")
     public UserInfo deleteUser(@PathVariable Integer toDeleteId, @RequestParam Integer loggedInUserId,
-                               @RequestParam Boolean deleteRecipes) {
+                               @RequestParam(defaultValue = "${default.value.delete.recipes}") Boolean deleteRecipes) {
         return service.deleteUser(toDeleteId, loggedInUserId, deleteRecipes);
     }
 
@@ -77,7 +78,7 @@ public class UserController {
     @Operation(summary = "saves rating")
     @ApiResponse(responseCode = "201", description = "rating saved")
     public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer recipeId,
-                                 @RequestBody RatingCreateUpdateCommand command){
+                                 @Valid @RequestBody RatingCreateUpdateCommand command){
         return service.saveOrUpdateRating(userId, recipeId, command);
     }
 

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "creates a recipe")
     @ApiResponse(responseCode = "201", description = "recipe has been created")
-    public RecipeInfo saveRecipe(@RequestParam Integer userId, @RequestBody RecipeCreateUpdateCommand command) {
+    public RecipeInfo saveRecipe(@RequestParam Integer userId, @Valid @RequestBody RecipeCreateUpdateCommand command) {
         LocalDate creationDate = LocalDate.now();
         return service.saveRecipe(userId, creationDate, command);
     }
@@ -72,7 +73,7 @@ public class RecipeController {
     @ApiResponse(responseCode = "201", description = "specific recipe updated")
     public RecipeInfo updateRecipe(@PathVariable Integer recipeId,
                                    @RequestParam Integer userId,
-                                   @RequestBody RecipeCreateUpdateCommand command) {
+                                   @Valid @RequestBody RecipeCreateUpdateCommand command) {
         LocalDate editDate = LocalDate.now();
         return service.updateRecipe(recipeId, userId, editDate, command);
     }

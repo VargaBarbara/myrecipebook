@@ -1,11 +1,11 @@
-CREATE TABLE IF NOT EXISTS `recipe` (
+CREATE TABLE IF NOT EXISTS `recipes` (
 
-    `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `preparation` varchar(4000) NOT NULL,
-    `note` varchar(255),
-    `creator_id` int,
-    `creation_date` DATE NOT NULL,
-    `last_edit_date` DATE NOT NULL,
-     FOREIGN KEY (creator_id) REFERENCES user(id)
+                                      `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                      `preparation` varchar(4000) NOT NULL,
+                                      `note` varchar(255),
+                                      `creator_id` int,
+                                      `creation_date` DATE NOT NULL,
+                                      `last_edit_date` DATE NOT NULL,
+                                      FOREIGN KEY (creator_id) REFERENCES users(id)
 
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8;
