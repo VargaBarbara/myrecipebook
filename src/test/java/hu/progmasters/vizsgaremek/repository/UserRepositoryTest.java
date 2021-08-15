@@ -1,6 +1,6 @@
 package hu.progmasters.vizsgaremek.repository;
 
-import hu.progmasters.vizsgaremek.domain.User;;
+import hu.progmasters.vizsgaremek.domain.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -135,6 +135,12 @@ public class UserRepositoryTest {
         assertEquals("CruellaDeVil1", cruellaUpdated.getName());
         assertEquals("cruella.de.vil1@evil.com", cruellaUpdated.getEmail());
         assertThat(cruellaUpdated.getRecipes()).isEmpty();
+
+        User cruellaFromRepo = userRepositoryJPA.findById(1).get();
+        assertEquals(1, cruellaFromRepo.getId());
+        assertEquals("CruellaDeVil1", cruellaFromRepo.getName());
+        assertEquals("cruella.de.vil1@evil.com", cruellaFromRepo.getEmail());
+        assertThat(cruellaFromRepo.getRecipes()).isEmpty();
     }
 
     @Test
