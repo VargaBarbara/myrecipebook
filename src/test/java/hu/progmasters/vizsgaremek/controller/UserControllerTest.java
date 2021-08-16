@@ -74,7 +74,6 @@ public class UserControllerTest {
     RecipeInfo fourthRecipeInfo = new RecipeInfo(4, shakeTheMilk4Preparation, shakeTheMilk4Note,
             2, creationDate, lastEditDate, 0.0);
 
-
     ValidationError nameBlank = new ValidationError("name", "cannot be blank");
     ValidationError emailBlank = new ValidationError("email", "cannot be blank");
     ValidationError emailFormat = new ValidationError("email", "format must be email");
