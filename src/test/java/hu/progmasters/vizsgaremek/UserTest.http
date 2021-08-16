@@ -76,7 +76,7 @@ Content-Type: application/json
 Accept: application/json
 
 ### deleteUser --- TODO minden esetre
-DELETE http://localhost:8080/api/users/1?loggedInUserId=1&deleteRecipes=false
+DELETE http://localhost:8080/api/users/1?loggedInUserId=1
 Content-Type: application/json
 Accept: application/json
 
