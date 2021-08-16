@@ -42,7 +42,7 @@ public class UserControllerTest {
     UserInfo cruellaDeVil1Info = new UserInfo(1, "CruellaDeVil1", "cruella.de.vil101@evil.com", List.of());
     UserInfo snowWhite2Info = new UserInfo(2, "SnowWhite2", "snow.white2@good.com", List.of());
     UserInfo yarnFairy3Info = new UserInfo(3, "YarnFairy3", "yarn.fairy3@good.com", List.of());
-    UserInfo dracula4Info = new UserInfo(4, "Dracula4", "dracula4@whatever.com", List.of());
+    //UserInfo dracula4Info = new UserInfo(4, "Dracula4", "dracula4@whatever.com", List.of());
 
     String beautyBeast1Preparation = "Tüzes borral teli pohár ontja bíbor illatát. " +
             "Végül még teázni sikk, édességhez jólesik.";
@@ -57,8 +57,8 @@ public class UserControllerTest {
             "majd 15 percig lendületes mozdulatokkal rázd össze.";
     String shakeTheMilk4Note = "Riszálom úgyis-úgyis!";
 
-    LocalDate creationDate = LocalDate.of(2021,8,15); //ForAllRecipes
-    LocalDate lastEditDate = LocalDate.of(2021,8,15); //ForAllRecipes
+    LocalDate creationDate = LocalDate.now(); //ForAllRecipes
+    LocalDate lastEditDate = LocalDate.now(); //ForAllRecipes
 
     RecipeCreateUpdateCommand firstRecipe = new RecipeCreateUpdateCommand(beautyBeast1Preparation, beautyBeast1Note);
     RecipeCreateUpdateCommand secondRecipe = new RecipeCreateUpdateCommand(breadedDrawer2Preparation, breadedDrawer2Note);
@@ -77,10 +77,6 @@ public class UserControllerTest {
     ValidationError nameBlank = new ValidationError("name", "cannot be blank");
     ValidationError emailBlank = new ValidationError("email", "cannot be blank");
     ValidationError emailFormat = new ValidationError("email", "format must be email");
-
-    ValidationError fingersBlank = new ValidationError("fingers", "cannot be blank");
-    ValidationError fingersBelowMin = new ValidationError("fingers", "must be minimum 1");
-    ValidationError fingersAboveMax = new ValidationError("fingers", "must be maximum 10");
 
     ValidationError cruellaNotFound = new ValidationError("userID", "user with id 1 is not found");
     ValidationError snowNotFound = new ValidationError("userID", "user with id 2 is not found");
@@ -234,38 +230,6 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/recipes/recipe/4"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(fourthRecipeInfo)));
-    }
-
-    //Rating methods-------------------------------------------------------------------------------------------------
-
-    @Test
-    @Order(10)
-    void testList_saveRating_201Created() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-    }
-
-    @Test
-    @Order(11)
-    void testList_updateRating_201Created() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-    }
-
-    @Test
-    @Order(12)
-    void testList_findRatingByUserAndRecipe_withThreeUsersWithRecipes() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-    }
-
-    @Test
-    @Order(13)
-    void testList_findAllRatingsByUser_200_ok() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-    }
-
-    @Test
-    @Order(14)
-    void testList_deleteRating_200_ok() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
     }
 
 }

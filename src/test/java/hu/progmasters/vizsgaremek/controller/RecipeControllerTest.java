@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import hu.progmasters.vizsgaremek.dto.RecipeCreateUpdateCommand;
 import hu.progmasters.vizsgaremek.dto.RecipeInfo;
 import hu.progmasters.vizsgaremek.dto.UserCreateUpdateCommand;
-import hu.progmasters.vizsgaremek.dto.UserInfo;
 import hu.progmasters.vizsgaremek.exceptionhandling.ValidationError;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +41,6 @@ public class RecipeControllerTest {
     UserCreateUpdateCommand dracula4 = new UserCreateUpdateCommand
             ("Dracula4", "dracula4@whatever.com");
 
-    UserInfo cruellaDeVil1Info = new UserInfo(1, "CruellaDeVil1", "cruella.de.vil101@evil.com", List.of());
-    UserInfo snowWhite2Info = new UserInfo(2, "SnowWhite2", "snow.white2@good.com", List.of());
-    UserInfo yarnFairy3Info = new UserInfo(3, "YarnFairy3", "yarn.fairy3@good.com", List.of());
-    UserInfo dracula4Info = new UserInfo(4, "Dracula4", "dracula4@whatever.com", List.of());
-
     String beautyBeast1Preparation = "Tüzes borral teli pohár ontja bíbor illatát. " +
             "Végül még teázni sikk, édességhez jólesik.";
     String beautyBeast1Note = "Szörnyen jó, bon appetit!";
@@ -60,8 +54,8 @@ public class RecipeControllerTest {
             "majd 15 percig lendületes mozdulatokkal rázd össze.";
     String shakeTheMilk4Note = "Riszálom úgyis-úgyis!";
 
-    LocalDate creationDate = LocalDate.of(2021, 8, 16); //ForAllRecipes
-    LocalDate lastEditDate = LocalDate.of(2021, 8, 16); //ForAllRecipes
+    LocalDate creationDate = LocalDate.now(); //ForAllRecipes
+    LocalDate lastEditDate = LocalDate.now(); //ForAllRecipes
 
     RecipeCreateUpdateCommand firstRecipe = new RecipeCreateUpdateCommand(beautyBeast1Preparation, beautyBeast1Note);
     RecipeCreateUpdateCommand secondRecipe = new RecipeCreateUpdateCommand(breadedDrawer2Preparation, breadedDrawer2Note);
@@ -86,7 +80,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(1)
-    public void init() throws Exception{
+    public void init() throws Exception {
 
         //Necessary Users
         mockMvc.perform(post("/api/users")
@@ -116,18 +110,18 @@ public class RecipeControllerTest {
 
     @Test
     @Order(2)
-    void testSave_validRecipe_201Created() throws Exception{
+    void testSave_validRecipe_201Created() throws Exception {
         //@RequestParam Integer userId
         mockMvc.perform(post("/api/recipes?userId=3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(thirdRecipe)))
-        .andExpect(status().isCreated())
-        .andExpect(content().json(objectMapper.writeValueAsString(thirdRecipeInfo)));
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(thirdRecipeInfo)));
     }
 
     @Test
     @Order(3)
-    void testSave_everythingWrong_400BadRequest() throws Exception{
+    void testSave_everythingWrong_400BadRequest() throws Exception {
         fourthRecipe.setPreparation("    ");
         fourthRecipe.setNote("01234567890123456789012345678901234567890123456789012345678901234567890123456789" +
                 "012345678901234567890123456789");
@@ -142,7 +136,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(4)
-    void testList_findAllRecipes_200_Ok() throws Exception{
+    void testList_findAllRecipes_200_Ok() throws Exception {
         List<RecipeInfo> expected = List.of(firstRecipeInfo, secondRecipeInfo, thirdRecipeInfo);
         mockMvc.perform(get("/api/recipes")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -152,7 +146,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(5)
-    void testList_findRecipeById_200_Ok() throws Exception{
+    void testList_findRecipeById_200_Ok() throws Exception {
         //"/recipe/{recipeId}"
         mockMvc.perform(get("/api/recipes/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -162,7 +156,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(6)
-    void testList_findRecipesByUser_200_Ok() throws Exception{
+    void testList_findRecipesByUser_200_Ok() throws Exception {
         //"/user/{userId}"
         //savefourthRecipeFor User 1
         fourthRecipeInfo.setCreatorId(1);
@@ -180,7 +174,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(7)
-    void testList_updateRecipe_201Created() throws Exception{
+    void testList_updateRecipe_201Created() throws Exception {
         //@RequestParam Integer userId
         //"/{recipeId}"
         String newNoteFor2 = "A szú nem volt valami jó ötlet.";
@@ -196,7 +190,7 @@ public class RecipeControllerTest {
 
     @Test
     @Order(8)
-    void testList_deleteRecipe__200_Ok() throws Exception{
+    void testList_deleteRecipe__200_Ok() throws Exception {
         //@RequestParam Integer userId
         //"/{recipeId}"
         fourthRecipeInfo.setCreatorId(1);
