@@ -12,13 +12,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //NoAuthorityForActionException                             ok
-    //RatingNotFoundException                                   ok
-    //RecipeNotFoundException                                   ok
-    //UserNotFoundException                                     ok
-    //EmailIsAlreadyInUseException                              ok
-    //MethodArgumentNotValidException                           ok
-
     //TODO log
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
