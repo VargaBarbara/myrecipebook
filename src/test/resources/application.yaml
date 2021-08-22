@@ -17,3 +17,4 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
     show-sql: on
+default.value.delete.recipes: true

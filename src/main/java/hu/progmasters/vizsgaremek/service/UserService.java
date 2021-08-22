@@ -70,10 +70,13 @@ public class UserService {
         Optional<User> oldUser = userRepository.findById(toUpdateId);
         User toUpdate = modelMapper.map(command, User.class);
         toUpdate.setId(toUpdateId);
+        Optional<User> userWithCommandEmail = userRepository.findByEmail(command.getEmail());
         if (oldUser.isEmpty()) {
             throw new UserNotFoundException(toUpdateId);
         } else if(!toUpdate.getId().equals(loggedInUserId)) {
             throw new NoAuthorityForActionException(loggedInUserId, toUpdateId);
+        } else if (userWithCommandEmail.isPresent() && !toUpdateId.equals(userWithCommandEmail.get().getId())) {
+            throw new EmailIsAlreadyInUseException(command.getEmail());
         }
         toUpdate.setRecipes(oldUser.get().getRecipes());
 
@@ -131,8 +134,9 @@ public class UserService {
         toSave.setCreationDate(creationDate);
         toSave.setLastEditDate(creationDate);
         //Save and mapping to Info
-        Recipe saved = recipeRepository.save(toSave).get();
-        return convertRecipeToRecipeInfo(saved);
+        Optional<Recipe> saved = recipeRepository.save(toSave);
+        Recipe savedRecipe = saved.get();
+        return convertRecipeToRecipeInfo(savedRecipe);
     }
 
     public List<RecipeInfo> findAllRecipes() {

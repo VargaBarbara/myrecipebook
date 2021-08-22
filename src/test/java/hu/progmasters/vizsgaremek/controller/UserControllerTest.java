@@ -192,7 +192,7 @@ public class UserControllerTest {
         cruellaDeVil1Info.setEmail("cruella.de.vil1@evil.com");
         cruellaDeVil1Info.setRecipes(List.of(firstRecipeInfo, secondRecipeInfo));
 
-        mockMvc.perform(delete("/api/users/1?loggedInUserId=1&deleteRecipes=true"))
+        mockMvc.perform(delete("/api/users/1?loggedInUserId=1&deleteRecipes"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(cruellaDeVil1Info)));
 
