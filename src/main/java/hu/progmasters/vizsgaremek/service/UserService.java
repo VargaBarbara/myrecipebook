@@ -160,6 +160,9 @@ public class UserService {
     }
 
     public List<RecipeInfo> findRecipesByUser(Integer userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
         List<Recipe> recipes = recipeRepository.findByUser(userId);
         return recipes.stream()
                 .map(this::convertRecipeToRecipeInfo).collect(Collectors.toList());
