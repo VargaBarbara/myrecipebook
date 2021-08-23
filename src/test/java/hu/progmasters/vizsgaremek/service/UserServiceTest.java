@@ -62,161 +62,135 @@ class UserServiceTest {
     String breadedDrawer2Preparation = "Kirántott fiók recept! " +
             "Végy egy jókora fiókot és könnyed laza mozdulattal rántsd ki.";
     String breadedDrawer2Note = "Omlósabb lesz, ha szúval előfűszerezzük.";
+    String hunterGames3Preparation = "Vadászvacsora! Vadászd össze a kamra tartalmát, " +
+            "ízlésesen helyezd egy tálcára és fogyaszd egészséggel.";
+    ;
+    String hunterGames3Note = "Csak ehető dolgokra vadássz!";
+    String shakeTheMilk4Preparation = "Milkshake 2 személyre! Önts 4 dl tejet egy shakerbe, " +
+            "majd 15 percig lendületes mozdulatokkal rázd össze.";
+    String shakeTheMilk4Note = "Riszálom úgyis-úgyis!";
 
     LocalDate creationDate = LocalDate.now(); //ForAllRecipes
     LocalDate lastEditDate = LocalDate.now(); //ForAllRecipes
 
     RecipeCreateUpdateCommand firstRecipeCommand = new RecipeCreateUpdateCommand(beautyBeast1Preparation, beautyBeast1Note);
     RecipeCreateUpdateCommand secondRecipeCommand = new RecipeCreateUpdateCommand(breadedDrawer2Preparation, breadedDrawer2Note);
+    RecipeCreateUpdateCommand thirdRecipeCommand = new RecipeCreateUpdateCommand(hunterGames3Preparation, hunterGames3Note);
+    RecipeCreateUpdateCommand fourthRecipeCommand = new RecipeCreateUpdateCommand(shakeTheMilk4Preparation, shakeTheMilk4Note);
+
+    RecipeInfo firstRecipeInfo = new RecipeInfo(1, beautyBeast1Preparation, beautyBeast1Note,
+            1, creationDate, lastEditDate, 0.0);
+    RecipeInfo secondRecipeInfo = new RecipeInfo(2, breadedDrawer2Preparation, breadedDrawer2Note,
+            2, creationDate, lastEditDate, 0.0);
+    RecipeInfo thirdRecipeInfo = new RecipeInfo(3, hunterGames3Preparation, hunterGames3Note,
+            3, creationDate, lastEditDate, 0.0);
+    RecipeInfo fourthRecipeInfo = new RecipeInfo(4, shakeTheMilk4Preparation, shakeTheMilk4Note,
+            4, creationDate, lastEditDate, 0.0);
 
     Recipe firstRecipe = new Recipe(null, beautyBeast1Preparation, beautyBeast1Note,
             cruellaDeVil1FromRepo, creationDate, lastEditDate);
     Recipe secondRecipe = new Recipe(null, breadedDrawer2Preparation, breadedDrawer2Note,
             snowWhite2FromRepo, creationDate, lastEditDate);
+    Recipe thirdRecipe = new Recipe(null, hunterGames3Preparation, hunterGames3Note,
+            yarnFairy3FromRepo, creationDate, lastEditDate);
+    Recipe fourthRecipe = new Recipe(null, shakeTheMilk4Preparation, shakeTheMilk4Note,
+            dracula4FromRepo, creationDate, lastEditDate);
 
     Recipe firstRecipeFromRepo = new Recipe(1, beautyBeast1Preparation, beautyBeast1Note,
             cruellaDeVil1FromRepo, creationDate, lastEditDate);
     Recipe secondRecipeFromRepo = new Recipe(2, breadedDrawer2Preparation, breadedDrawer2Note,
             snowWhite2FromRepo, creationDate, lastEditDate);
+    Recipe thirdRecipeFromRepo = new Recipe(3, hunterGames3Preparation, hunterGames3Note,
+            yarnFairy3FromRepo, creationDate, lastEditDate);
+    Recipe fourthRecipeFromRepo = new Recipe(4, shakeTheMilk4Preparation, shakeTheMilk4Note,
+            dracula4FromRepo, creationDate, lastEditDate);
 
     @Test
     void saveUser() {
-        when(userRepository.findByEmail(cruellaDeVil1.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(cruellaDeVil1Command.getEmail())).thenReturn(Optional.empty());
         when(userRepository.save(cruellaDeVil1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        UserInfo cruellaTestInfo = service.saveUser(cruellaDeVil1Command);
-        assertEquals(cruellaDeVil1Info, cruellaTestInfo);
 
-        when(userRepository.findByEmail(cruellaDeVil1.getEmail())).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        assertThrows(EmailIsAlreadyInUseException.class, () -> service.saveUser(cruellaDeVil1Command));
+        assertEquals(cruellaDeVil1Info, service.saveUser(cruellaDeVil1Command));
 
-        verify(userRepository, times(1)).save(any());
+        //EmailIsAlreadyInUse case
+        when(userRepository.findByEmail(snowWhite2Command.getEmail())).thenReturn(Optional.of(snowWhite2FromRepo));
+        assertThrows(EmailIsAlreadyInUseException.class, () -> service.saveUser(snowWhite2Command));
+
         verify(userRepository, times(2)).findByEmail(any());
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
     void findAllUsers() {
-        when(userRepository.save(cruellaDeVil1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        when(userRepository.save(snowWhite2)).thenReturn(Optional.of(snowWhite2FromRepo));
-        when(userRepository.save(yarnFairy3)).thenReturn(Optional.of(yarnFairy3FromRepo));
-        when(userRepository.save(dracula4)).thenReturn(Optional.of(dracula4FromRepo));
-        when(userRepository.findAll()).thenReturn(List.of(cruellaDeVil1FromRepo, snowWhite2FromRepo,
-                yarnFairy3FromRepo, dracula4FromRepo));
-        service.saveUser(cruellaDeVil1Command);
-        service.saveUser(snowWhite2Command);
-        service.saveUser(yarnFairy3Command);
-        service.saveUser(dracula4Command);
+        when(userRepository.findAll())
+                .thenReturn(List.of(cruellaDeVil1FromRepo, snowWhite2FromRepo, yarnFairy3FromRepo, dracula4FromRepo));
+        List<UserInfo> expectedInfos = List.of(cruellaDeVil1Info, snowWhite2Info, yarnFairy3Info, dracula4Info);
+        assertEquals(expectedInfos, service.findAllUsers());
 
-        List<UserInfo> actualUsers = service.findAllUsers();
-        assertEquals(List.of(cruellaDeVil1Info, snowWhite2Info, yarnFairy3Info, dracula4Info), actualUsers);
-
-        verify(userRepository, times(4)).save(any());
         verify(userRepository, times(1)).findAll();
     }
 
     @Test
     void findAllUsersWithRecipes() {
-        when(userRepository.findByEmail(cruellaDeVil1Command.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.findByEmail(snowWhite2Command.getEmail())).thenReturn(Optional.empty());
-
-        when(userRepository.save(cruellaDeVil1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        when(userRepository.save(snowWhite2)).thenReturn(Optional.of(snowWhite2FromRepo));
-
-        when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        when(userRepository.findById(2)).thenReturn(Optional.of(snowWhite2FromRepo));
-
-        when(recipeRepository.save(firstRecipe)).thenReturn(Optional.of(firstRecipeFromRepo));
-        when(recipeRepository.save(secondRecipe)).thenReturn(Optional.of(secondRecipeFromRepo));
-
         cruellaDeVil1FromRepo.setRecipes(List.of(firstRecipeFromRepo));
         snowWhite2FromRepo.setRecipes(List.of(secondRecipeFromRepo));
-        when(userRepository.findAll()).thenReturn(List.of(cruellaDeVil1FromRepo, snowWhite2FromRepo));
+        yarnFairy3FromRepo.setRecipes(List.of(thirdRecipeFromRepo));
+        dracula4FromRepo.setRecipes(List.of(fourthRecipeFromRepo));
+        when(userRepository.findAll())
+                .thenReturn(List.of(cruellaDeVil1FromRepo, snowWhite2FromRepo, yarnFairy3FromRepo, dracula4FromRepo));
 
-        UserInfo userInfo1 = service.saveUser(cruellaDeVil1Command);
-        UserInfo userInfo2 = service.saveUser(snowWhite2Command);
-        RecipeInfo recipeInfo1 = service.saveRecipe(1, creationDate, firstRecipeCommand);
-        RecipeInfo recipeInfo2 = service.saveRecipe(2, creationDate, secondRecipeCommand);
+        cruellaDeVil1Info.setRecipes(List.of(firstRecipeInfo));
+        snowWhite2Info.setRecipes(List.of(secondRecipeInfo));
+        yarnFairy3Info.setRecipes(List.of(thirdRecipeInfo));
+        dracula4Info.setRecipes(List.of(fourthRecipeInfo));
+        List<UserInfo> expectedInfos = List.of(cruellaDeVil1Info, snowWhite2Info, yarnFairy3Info, dracula4Info);
+        assertEquals(expectedInfos, service.findAllUsers());
 
-        userInfo1.setRecipes(List.of(recipeInfo1));
-        userInfo2.setRecipes(List.of(recipeInfo2));
-        List<UserInfo> expectedUserInfos = List.of(userInfo1, userInfo2);
+        verify(userRepository, times(1)).findAll();
 
-        List<UserInfo> actualUserInfos = service.findAllUsers();
-        assertEquals(expectedUserInfos, actualUserInfos);
-
-        verify(userRepository, times(2)).findByEmail(any());
-        verify(userRepository, times(2)).save(any());
-        verify(userRepository, times(2)).findById(any());
-        verify(recipeRepository, times(2)).save(any());
     }
 
     @Test
     void findUserById() {
-        when(userRepository.findByEmail(cruellaDeVil1Command.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.save(cruellaDeVil1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
         when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        when(userRepository.findById(2)).thenReturn(Optional.empty());
+        assertEquals(cruellaDeVil1Info, service.findUserById(1));
 
-        UserInfo savedInfo = service.saveUser(cruellaDeVil1Command);
-        UserInfo foundById1 = service.findUserById(1);
-        assertEquals(savedInfo, foundById1);
+        when(userRepository.findById(2)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> service.findUserById(2));
 
-        verify(userRepository, times(1)).findByEmail(any());
-        verify(userRepository, times(1)).save(any());
         verify(userRepository, times(2)).findById(any());
     }
 
     @Test
     void updateUser() {
-        when(userRepository.findByEmail(cruellaDeVil1Command.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.save(cruellaDeVil1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        service.saveUser(cruellaDeVil1Command);
+        String newEmail = "cruella.de.vil101@evil.com";
+        when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
+        cruellaDeVil1FromRepo.setEmail(newEmail);
+        cruellaDeVil1Command.setEmail(newEmail);
+        cruellaDeVil1Info.setEmail(newEmail);
+        when(userRepository.findByEmail(cruellaDeVil1FromRepo.getEmail())).thenReturn(Optional.empty());
 
         //Updated case
-        when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        cruellaDeVil1FromRepo.setEmail("cruella.de.vil1@evil.com");
-        when(userRepository.findByEmail(cruellaDeVil1FromRepo.getEmail())).thenReturn(Optional.empty());
         when(userRepository.update(cruellaDeVil1FromRepo)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-
-        cruellaDeVil1Command.setEmail("cruella.de.vil1@evil.com");
-        UserInfo cruellaInfoAfterUpdate = service.updateUser(1, 1, cruellaDeVil1Command);
-        assertEquals("cruella.de.vil1@evil.com", cruellaInfoAfterUpdate.getEmail());
+        assertEquals(cruellaDeVil1Info, service.updateUser(1, 1, cruellaDeVil1Command));
 
         //UserNotFound case
         when(userRepository.findById(2)).thenReturn(Optional.empty());
-        when(userRepository.findByEmail(snowWhite2Command.getEmail())).thenReturn(Optional.empty());
-
         assertThrows(UserNotFoundException.class,
                 () -> service.updateUser(2, 2, snowWhite2Command));
 
         //NoAuthorityForAction case
-        when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        when(userRepository.findByEmail(cruellaDeVil1FromRepo.getEmail())).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-
         assertThrows(NoAuthorityForActionException.class,
                 () -> service.updateUser(1, 2, cruellaDeVil1Command));
 
         //EmailIsAlreadyInUse case
-        when(userRepository.findByEmail(snowWhite2.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.save(snowWhite2)).thenReturn(Optional.of(snowWhite2FromRepo));
-        service.saveUser(snowWhite2Command);
-
-        when(userRepository.findById(1)).thenReturn(Optional.of(cruellaDeVil1FromRepo));
-        cruellaDeVil1FromRepo.setEmail(snowWhite2FromRepo.getEmail());
-        when(userRepository.findByEmail(snowWhite2Command.getEmail())).thenReturn(Optional.of(snowWhite2FromRepo));
-
-        cruellaDeVil1Command.setEmail(snowWhite2Command.getEmail());
+        when(userRepository.findByEmail(cruellaDeVil1FromRepo.getEmail())).thenReturn(Optional.of(snowWhite2FromRepo));
         assertThrows(EmailIsAlreadyInUseException.class,
                 () -> service.updateUser(1, 1, cruellaDeVil1Command));
-
-        verify(userRepository, times(6)).findByEmail(any());
-        verify(userRepository, times(2)).save(any());
-        verify(userRepository, times(4)).findById(any());
-        verify(userRepository, times(1)).update(any());
     }
 
     @Test
-    void deleteUser() {
+    void deleteUser() { //TODO simplifying
         //saves
         when(userRepository.findByEmail(cruellaDeVil1Command.getEmail())).thenReturn(Optional.empty());//
         when(userRepository.findByEmail(snowWhite2Command.getEmail())).thenReturn(Optional.empty());//
