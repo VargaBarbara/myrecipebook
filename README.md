@@ -1,31 +1,17 @@
-# Vizsgaremek
+# Vizsgaremek - Receptgyűjtemény
 
-A feladatod egy backend API projekt elkészítése, általad választott témában.  
-A témákhoz összeszedtünk néhány ötletet, kérlek írd be magad ahhoz a témához, amit te választanál. Érdemes mindenkinek egyedi alkalmazást készíteni, próbáljatok meg osztozkodni a témákon.  
-Nem csak ezek közül a témák közül lehet választani, ha saját ötleted van, akkor nyugodtan írd hozzá a listához.
+##Az alkalmazás célja
 
-[témaötletek](https://docs.google.com/document/d/1F30RkobWaX8L44ikgZ3GXKc0w7bEcgfUXIGEzSGSwHM/edit?usp=sharing)
+Sokan találkozhattunk a nehezen megválaszolható kérdéssel: Mit főzzünk ma?
+A receptgyűjtemény alkalmazás célja ennek a kérdésnek a megválaszolása, illetve a különféle receptgyűjtéssel 
+és tárolással kapcsolatos fogyasztói igények kielégítése. 
 
-## Követelmények
+##Az alkalmazás konténerét létrehozó utasítások:
 
-* Maven projekt
-* Spring Boot alkalmazás
-* REST API, Swagger, OpenAPI dokumentáció
-* SQL backend (pl. MySQL, MariaDB)
-* Flyway sémamigráció, SQL táblalétrehozás, adatbetöltés
-* Hibakezelés
-* Spring Data JPA repository
-* Integrációs tesztek
-* Konténerizált alkalmazás
+Csak az adatbázis van konténerben (ez működik):
+* docker network create vizsgaremeknetwork
+* docker run --name vizsgaremekdb --network vizsgaremeknetwork -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=vizsgaremek -d -p 3307:3306 mysql:latest
 
-## Feladat nagysága
-
-* Legalább két 1-n kapcsolatban lévő tábla
-* Legalább két SQL migráció
-* Legalább két entitás
-* Legalább két controller
-* Minden bemenő paraméter validálása
-* Legalább egy property beolvasása
-* Minden HTTP metódusra legalább egy végpont (`GET`, `POST`, `PUT`, `DELETE`)
-* Legalább 60%-os tesztlefedettség, amely tartalmaz egység és integrációs teszteket is
-* Egy `Dockerfile`
+Alkalmazás és az adatbázis is konténerben fut (nem működik, azonnal exitel):
+* docker build -t vizsgaremekapp .
+* docker run --name vizsgaremekapp --network vizsgaremeknetwork -p 8080:8080 -d vizsgaremekapp

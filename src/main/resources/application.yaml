@@ -1,9 +1,9 @@
 spring:
   datasource:
     # ha csak az adatbázis fut konténerben, az alkalmazást meg IDEA-ból vagy külön indítjátok el
-    # url: jdbc:mysql://127.0.0.1:3307/vizsgaremek?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+    url: jdbc:mysql://127.0.0.1:3307/vizsgaremek?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
     # ez az URL kell akkor, ha az adatbázist és az alkalmazást is konténerizálva futtatjátok
-    url: jdbc:mysql://vizsgaremekdb/vizsgaremek?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+    # url: jdbc:mysql://vizsgaremekdb/vizsgaremek?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
     username: root
     password: 1234
   jpa:
