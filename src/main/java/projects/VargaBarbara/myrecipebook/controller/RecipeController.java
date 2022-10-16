@@ -1,5 +1,7 @@
 package projects.VargaBarbara.myrecipebook.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import projects.VargaBarbara.myrecipebook.dto.RecipeCreateUpdateCommand;
 import projects.VargaBarbara.myrecipebook.dto.RecipeInfo;
 import projects.VargaBarbara.myrecipebook.service.UserService;
@@ -18,7 +20,7 @@ import java.util.List;
 @Tag(name = "Operations on recipes")
 public class RecipeController {
 
-    //TODO log
+    public static final Logger LOGGER = LoggerFactory.getLogger(RecipeController.class);
 
     private UserService service;
 
@@ -31,6 +33,7 @@ public class RecipeController {
     @Operation(summary = "creates a recipe")
     @ApiResponse(responseCode = "201", description = "recipe has been created")
     public RecipeInfo saveRecipe(@RequestParam Integer userId, @Valid @RequestBody RecipeCreateUpdateCommand command) {
+        LOGGER.info("POST request for saveRecipe with userId: " + userId + "and with body: " + command.toString());
         LocalDate creationDate = LocalDate.now();
         return service.saveRecipe(userId, creationDate, command);
     }
@@ -40,6 +43,7 @@ public class RecipeController {
     @Operation(summary = "lists all recipes")
     @ApiResponse(responseCode = "200", description = "all recipes listed")
     public List<RecipeInfo> findAllRecipes() {
+        LOGGER.info("GET request for findAllRecipes");
         return service.findAllRecipes();
     }
 
@@ -48,6 +52,7 @@ public class RecipeController {
     @Operation(summary = "returns one specific recipe")
     @ApiResponse(responseCode = "200", description = "specific recipe returned")
     public RecipeInfo findRecipeById(@PathVariable Integer recipeId) {
+        LOGGER.info("GET request for findRecipeById with recipeId: " + recipeId);
         return service.findRecipeById(recipeId);
     }
 
@@ -56,6 +61,7 @@ public class RecipeController {
     @Operation(summary = "returns one specific recipe")
     @ApiResponse(responseCode = "200", description = "specific recipe returned")
     public RecipeInfo findRandomRecipe() {
+        LOGGER.info("GET request for findRandomRecipe");
         return service.findRandomRecipe();
     }
 
@@ -64,6 +70,7 @@ public class RecipeController {
     @Operation(summary = "returns all recipes with user id given")
     @ApiResponse(responseCode = "200", description = "all recipes of the given user listed")
     public List<RecipeInfo> findRecipesByUser(@PathVariable Integer userId) {
+        LOGGER.info("GET request for findRecipesByUser with userId: " + userId);
         return service.findRecipesByUser(userId);
     }
 
@@ -74,6 +81,8 @@ public class RecipeController {
     public RecipeInfo updateRecipe(@PathVariable Integer recipeId,
                                    @RequestParam Integer userId,
                                    @Valid @RequestBody RecipeCreateUpdateCommand command) {
+        LOGGER.info("PUT request for updateRecipe with recipeId: " + recipeId
+                + " with userId: " + userId + " and with body: " + command.toString());
         LocalDate editDate = LocalDate.now();
         return service.updateRecipe(recipeId, userId, editDate, command);
     }
@@ -83,6 +92,8 @@ public class RecipeController {
     @Operation(summary = "deletes one specific recipe")
     @ApiResponse(responseCode = "200", description = "specific recipe deleted")
     public RecipeInfo deleteRecipe(@PathVariable Integer recipeId, @RequestParam Integer userId) {
+        LOGGER.info("DELETE request for deleteRecipe with recipeId: " + recipeId
+                + " and with userId: " + userId);
         return service.deleteRecipe(recipeId, userId);
     }
 
