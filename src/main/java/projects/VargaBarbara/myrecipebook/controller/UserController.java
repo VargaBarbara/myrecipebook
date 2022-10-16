@@ -1,5 +1,7 @@
 package projects.VargaBarbara.myrecipebook.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import projects.VargaBarbara.myrecipebook.dto.RatingCreateUpdateCommand;
 import projects.VargaBarbara.myrecipebook.dto.RatingInfo;
 import projects.VargaBarbara.myrecipebook.dto.UserCreateUpdateCommand;
@@ -19,7 +21,7 @@ import java.util.List;
 @Tag(name = "Operations on users")
 public class UserController {
 
-    //TODO log
+    public static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private UserService service;
 
@@ -34,6 +36,7 @@ public class UserController {
     @Operation(summary = "creates a user account")
     @ApiResponse(responseCode = "201", description = "user account has been created")
     public UserInfo saveUser(@Valid @RequestBody UserCreateUpdateCommand command) {
+        LOGGER.info("POST request for saveUser with body: " + command.toString());
         return service.saveUser(command);
     }
 
@@ -42,6 +45,7 @@ public class UserController {
     @Operation(summary = "lists all users")
     @ApiResponse(responseCode = "200", description = "all users listed")
     public List<UserInfo> findAllUsers() {
+        LOGGER.info("GET request for findAllUsers");
         return service.findAllUsers();
     }
 
@@ -50,6 +54,7 @@ public class UserController {
     @Operation(summary = "returns one specific user")
     @ApiResponse(responseCode = "200", description = "specific user returned")
     public UserInfo findUserById(@PathVariable Integer id) {
+        LOGGER.info("GET request for findUserById with id: " + id);
         return service.findUserById(id);
     }
 
@@ -59,6 +64,8 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "specific user account updated")
     public UserInfo updateUser(@PathVariable Integer toUpdateId, @RequestParam Integer loggedInUserId,
                                @Valid @RequestBody UserCreateUpdateCommand command) {
+        LOGGER.info("PUT request for updateUser with toUpdateId: " + toUpdateId
+                + " with loggedInUserId: " + loggedInUserId + " and with body: " + command.toString());
         return service.updateUser(toUpdateId, loggedInUserId, command);
     }
 
@@ -68,6 +75,8 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "specific user account deleted")
     public UserInfo deleteUser(@PathVariable Integer toDeleteId, @RequestParam Integer loggedInUserId,
                                @RequestParam(defaultValue = "${default.value.delete.recipes}") Boolean deleteRecipes) {
+        LOGGER.info("DELETE request for deleteUser with toDeleteId: " + toDeleteId
+                + " with loggedInUserId: " + loggedInUserId + " and with deleteRecipes: " + deleteRecipes);
         return service.deleteUser(toDeleteId, loggedInUserId, deleteRecipes);
     }
 
@@ -79,6 +88,8 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "rating saved")
     public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer recipeId,
                                  @Valid @RequestBody RatingCreateUpdateCommand command){
+        LOGGER.info("POST request for saveRating with userId: " + userId + " with recipeId: "
+                + recipeId + " and with body: " + command.toString());
         return service.saveOrUpdateRating(userId, recipeId, command);
     }
 
@@ -87,6 +98,7 @@ public class UserController {
     @Operation(summary = "returns one specific rating")
     @ApiResponse(responseCode = "200", description = "specific rating returned")
     public RatingInfo findRatingByUserAndRecipe(@PathVariable Integer userId, @PathVariable Integer recipeId){
+        LOGGER.info("GET request for findRatingByUserAndRecipe with id: " + userId + " and with recipeId: " + recipeId);
         return service.findRatingByUserAndRecipe(userId, recipeId);
     }
 
@@ -95,6 +107,7 @@ public class UserController {
     @Operation(summary = "returns all ratings given by a specific user")
     @ApiResponse(responseCode = "200", description = "all ratings listed")
     public List<RatingInfo> findAllRatingsByUser(@PathVariable Integer userId){
+        LOGGER.info("GET request for findAllRatingsByUser with userId: " + userId);
         return service.findAllRatingsByUser(userId);
     }
 
@@ -103,6 +116,7 @@ public class UserController {
     @Operation(summary = "deletes one specific rating")
     @ApiResponse(responseCode = "200", description = "specific rating deleted")
     public RatingInfo deleteRating(@PathVariable Integer userId, @PathVariable Integer recipeId){
+        LOGGER.info("DELETE request for deleteRating with userId: " + userId + " and with recipeId: " + recipeId );
         return service.deleteRating(userId, recipeId);
     }
 
