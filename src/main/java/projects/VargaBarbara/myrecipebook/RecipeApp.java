@@ -21,11 +21,9 @@ public class RecipeApp {
         return new ObjectMapper().findAndRegisterModules();
     }
 
-        //TODO optional new banner
-    //TODO log
     //TODO RecipesService tests
     //TODO RatingsService tests
-    //TODO Presentation
     //TODO docker
+    //TODO outsource Rating methods from UserController
 
 }
