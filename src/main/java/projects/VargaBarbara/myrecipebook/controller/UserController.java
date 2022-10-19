@@ -1,17 +1,15 @@
 package projects.VargaBarbara.myrecipebook.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import projects.VargaBarbara.myrecipebook.dto.RatingCreateUpdateCommand;
-import projects.VargaBarbara.myrecipebook.dto.RatingInfo;
-import projects.VargaBarbara.myrecipebook.dto.UserCreateUpdateCommand;
-import projects.VargaBarbara.myrecipebook.dto.UserInfo;
-import projects.VargaBarbara.myrecipebook.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import projects.VargaBarbara.myrecipebook.dto.UserCreateUpdateCommand;
+import projects.VargaBarbara.myrecipebook.dto.UserInfo;
+import projects.VargaBarbara.myrecipebook.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,8 +26,6 @@ public class UserController {
     public UserController(UserService service) {
         this.service = service;
     }
-
-    //User methods------------------------------------------------------------------------------------------------
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,46 +74,6 @@ public class UserController {
         LOGGER.info("DELETE request for deleteUser with toDeleteId: " + toDeleteId
                 + " with loggedInUserId: " + loggedInUserId + " and with deleteRecipes: " + deleteRecipes);
         return service.deleteUser(toDeleteId, loggedInUserId, deleteRecipes);
-    }
-
-    //Rating methods-------------------------------------------------------------------------------------------
-
-    @PostMapping("/{userId}/ratings/{recipeId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "saves rating")
-    @ApiResponse(responseCode = "201", description = "rating saved")
-    public RatingInfo saveRating(@PathVariable Integer userId, @PathVariable Integer recipeId,
-                                 @Valid @RequestBody RatingCreateUpdateCommand command){
-        LOGGER.info("POST request for saveRating with userId: " + userId + " with recipeId: "
-                + recipeId + " and with body: " + command.toString());
-        return service.saveOrUpdateRating(userId, recipeId, command);
-    }
-
-    @GetMapping("/{userId}/ratings/{recipeId}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "returns one specific rating")
-    @ApiResponse(responseCode = "200", description = "specific rating returned")
-    public RatingInfo findRatingByUserAndRecipe(@PathVariable Integer userId, @PathVariable Integer recipeId){
-        LOGGER.info("GET request for findRatingByUserAndRecipe with id: " + userId + " and with recipeId: " + recipeId);
-        return service.findRatingByUserAndRecipe(userId, recipeId);
-    }
-
-    @GetMapping("/{userId}/ratings/")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "returns all ratings given by a specific user")
-    @ApiResponse(responseCode = "200", description = "all ratings listed")
-    public List<RatingInfo> findAllRatingsByUser(@PathVariable Integer userId){
-        LOGGER.info("GET request for findAllRatingsByUser with userId: " + userId);
-        return service.findAllRatingsByUser(userId);
-    }
-
-    @DeleteMapping("/{userId}/ratings/{recipeId}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "deletes one specific rating")
-    @ApiResponse(responseCode = "200", description = "specific rating deleted")
-    public RatingInfo deleteRating(@PathVariable Integer userId, @PathVariable Integer recipeId){
-        LOGGER.info("DELETE request for deleteRating with userId: " + userId + " and with recipeId: " + recipeId );
-        return service.deleteRating(userId, recipeId);
     }
 
 }
