@@ -220,7 +220,7 @@ Accept: application/json
 ###Rating methods------------------------------------------------------------------------------------------------------
 
 ###  saveRating
-POST http://localhost:8080/api/users/1/ratings/1
+POST http://localhost:8080/api/ratings/user/1/recipe/1
 Content-Type: application/json
 Accept: application/json
 
@@ -229,7 +229,7 @@ Accept: application/json
 }
 
 ###  saveRating - módosítás
-POST http://localhost:8080/api/users/1/ratings/1
+POST http://localhost:8080/api/ratings/user/1/recipe/1
 Content-Type: application/json
 Accept: application/json
 
@@ -238,7 +238,7 @@ Accept: application/json
 }
 
 ###  saveRating
-POST http://localhost:8080/api/users/3/ratings/1
+POST http://localhost:8080/api/ratings/user/3/recipe/1
 Content-Type: application/json
 Accept: application/json
 
@@ -247,7 +247,7 @@ Accept: application/json
 }
 
 ###  saveRating
-POST http://localhost:8080/api/users/3/ratings/3
+POST http://localhost:8080/api/ratings/user/3/recipe/3
 Content-Type: application/json
 Accept: application/json
 
@@ -256,26 +256,26 @@ Accept: application/json
 }
 
 ###  findRatingByUserAndRecipe
-GET http://localhost:8080/api/users/3/ratings/1
+GET http://localhost:8080/api/ratings/user/3/recipe/1
 Content-Type: application/json
 Accept: application/json
 
 ###  findAllRatingsByUser
-GET http://localhost:8080/api/users/3/ratings/
+GET http://localhost:8080/api/ratings/user/3/
 Content-Type: application/json
 Accept: application/json
 
 ###  findAllRatingsByUser
-GET http://localhost:8080/api/users/1/ratings/
+GET http://localhost:8080/api/ratings/user/1/
 Content-Type: application/json
 Accept: application/json
 
 ###  deleteRating
-DELETE http://localhost:8080/api/users/1/ratings/1
+DELETE http://localhost:8080/api/ratings/user/1/recipe/1
 Content-Type: application/json
 Accept: application/json
 
 ###  findAllRatingsByUser
-GET http://localhost:8080/api/users/1/ratings/
+GET http://localhost:8080/api/ratings/user/1/
 Content-Type: application/json
 Accept: application/json
