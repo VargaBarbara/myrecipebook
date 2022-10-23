@@ -24,8 +24,7 @@ public class RecipeApp {
     //TODO RecipesService tests
     //TODO RatingsService tests
     //TODO docker
-    //TODO update tests because of outsourcing (UserController -> RatingController)
-        //TODO RatingControllerTest
-        //TODO UserControllerTest
+    // TODO outsource common parts from tests
+    // TODO refactor tests so that they don't have to be ordered
 
 }

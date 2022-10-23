@@ -2,7 +2,6 @@ package projects.VargaBarbara.myrecipebook.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import projects.VargaBarbara.myrecipebook.dto.*;
 import projects.VargaBarbara.myrecipebook.exceptionhandling.ValidationError;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,31 +123,31 @@ public class RatingControllerTest {
                 .content(objectMapper.writeValueAsString(fourthRecipe)));
 
         //Ratings
-        mockMvc.perform(post("/api/users/1/ratings/1")
+        mockMvc.perform(post("/api/ratings/user/1/recipe/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstUserForFirstRecipe)));
-        mockMvc.perform(post("/api/users/1/ratings/2")
+        mockMvc.perform(post("/api/ratings/user/1/recipe/2")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstUserForSecondRecipe)));
-        mockMvc.perform(post("/api/users/1/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/1/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstUserForThirdRecipe)));
-        mockMvc.perform(post("/api/users/2/ratings/1")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForFirstRecipe)));
-        mockMvc.perform(post("/api/users/2/ratings/2")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/2")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForSecondRecipe)));
-        mockMvc.perform(post("/api/users/2/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForThirdRecipe)));
-        mockMvc.perform(post("/api/users/3/ratings/1")
+        mockMvc.perform(post("/api/ratings/user/3/recipe/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(thirdUserForFirstRecipe)));
-        mockMvc.perform(post("/api/users/3/ratings/2")
+        mockMvc.perform(post("/api/ratings/user/3/recipe/2")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(thirdUserForSecondRecipe)));
-        mockMvc.perform(post("/api/users/3/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/3/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(thirdUserForThirdRecipe)));
 
@@ -157,8 +156,8 @@ public class RatingControllerTest {
     @Test
     @Order(2)
     void testSave_saveRating_201Created() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-        mockMvc.perform(post("/api/users/4/ratings/4")
+        ///api/ratings/user/{userId}/recipe/{recipeId}
+        mockMvc.perform(post("/api/ratings/user/4/recipe/4")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(fourthUserForFourthRecipe)))
                 .andExpect(status().isCreated())
@@ -168,10 +167,10 @@ public class RatingControllerTest {
     @Test
     @Order(3)
     void testUpdate_updateRating_201Created() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
+        // /api/ratings/user/{userId}/recipe/{recipeId}
         fourthUserForFourthRecipe.setFingers(8);
         fourthUserForFourthRecipeInfo.setFingers(8);
-        mockMvc.perform(post("/api/users/4/ratings/4")
+        mockMvc.perform(post("/api/ratings/user/4/recipe/4")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(fourthUserForFourthRecipe)))
                 .andExpect(status().isCreated())
@@ -181,12 +180,12 @@ public class RatingControllerTest {
     @Test
     @Order(4)
     void testList_findRatingByUserAndRecipe_withThreeUsersWithRecipes() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-        mockMvc.perform(get("/api/users/1/ratings/3")
+        // /api/ratings/user/{userId}/recipe/{recipeId}
+        mockMvc.perform(get("/api/ratings/user/1/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(firstUserForThirdRecipeInfo)));
-        mockMvc.perform(get("/api/users/3/ratings/2")
+        mockMvc.perform(get("/api/ratings/user/3/recipe/2")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(thirdUserForSecondRecipeInfo)));
@@ -195,10 +194,10 @@ public class RatingControllerTest {
     @Test
     @Order(5)
     void testList_findAllRatingsByUser_200_ok() throws Exception {
-        // "/{userId}/ratings/"
+        // /api/ratings/user/{userId}/
         List<RatingInfo> expected = List.of(thirdUserForFirstRecipeInfo, thirdUserForSecondRecipeInfo,
                 thirdUserForThirdRecipeInfo);
-        mockMvc.perform(get("/api/users/3/ratings/")
+        mockMvc.perform(get("/api/ratings/user/3/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(expected)));
@@ -207,16 +206,12 @@ public class RatingControllerTest {
     @Test
     @Order(6)
     void testDelete_deleteRating_200_ok() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
-        mockMvc.perform(get("/api/users/2/ratings/3")
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(secondUserForThirdRecipe)));
-        mockMvc.perform(delete("/api/users/1/ratings/3")
+        // /api/ratings/user/{userId}/recipe/{recipeId}
+        mockMvc.perform(delete("/api/ratings/user/1/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(firstUserForThirdRecipeInfo)));
-        mockMvc.perform(get("/api/users/1/ratings/3")
+        mockMvc.perform(get("/api/ratings/user/1/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(firstUserForThirdRecipeNotFound))));
@@ -225,23 +220,23 @@ public class RatingControllerTest {
     @Test
     @Order(7)
     void testSave_invalidRating_404BadRequest() throws Exception {
-        // "/{userId}/ratings/{recipeId}"
+        // /api/ratings/user/{userId}/recipe/{recipeId}
         secondUserForThirdRecipe.setFingers(0);
-        mockMvc.perform(post("/api/users/2/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForThirdRecipe)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(fingersBelowMin))));
 
         secondUserForThirdRecipe.setFingers(11);
-        mockMvc.perform(post("/api/users/2/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForThirdRecipe)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(fingersAboveMax))));
 
         secondUserForThirdRecipe.setFingers(null);
-        mockMvc.perform(post("/api/users/2/ratings/3")
+        mockMvc.perform(post("/api/ratings/user/2/recipe/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondUserForThirdRecipe)))
                 .andExpect(status().isBadRequest())
